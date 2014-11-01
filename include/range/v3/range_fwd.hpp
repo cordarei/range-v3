@@ -46,6 +46,17 @@ namespace ranges
 {
     inline namespace v3
     {
+        namespace odr_detail
+        {
+          template <typename T>
+          struct static_const
+          {
+            static constexpr T value{};
+          };
+          template <typename T>
+          constexpr T static_const<T>::value;
+        }
+
         namespace adl_begin_end_detail
         {
             struct begin_fn;
@@ -77,33 +88,33 @@ namespace ranges
         template<typename Derived>
         struct pipeable;
 
-        extern adl_begin_end_detail::begin_fn const begin;
-        extern adl_begin_end_detail::end_fn const end;
-        extern adl_begin_end_detail::cbegin_fn const cbegin;
-        extern adl_begin_end_detail::cend_fn const cend;
+        // extern adl_begin_end_detail::begin_fn const begin;
+        // extern adl_begin_end_detail::end_fn const end;
+        // extern adl_begin_end_detail::cbegin_fn const cbegin;
+        // extern adl_begin_end_detail::cend_fn const cend;
 
-        extern adl_size_detail::size_fn const size;
+        // extern adl_size_detail::size_fn const size;
 
         struct advance_fn;
-        extern advance_fn const advance;
+        // extern advance_fn const advance;
 
         struct advance_to_fn;
-        extern advance_to_fn const advance_to;
+        // extern advance_to_fn const advance_to;
 
         struct advance_bounded_fn;
-        extern advance_bounded_fn const advance_bounded;
+        // extern advance_bounded_fn const advance_bounded;
 
         struct next_fn;
-        extern next_fn const next;
+        // extern next_fn const next;
 
         struct prev_fn;
-        extern prev_fn const prev;
+        // extern prev_fn const prev;
 
         struct distance_fn;
-        extern distance_fn const distance;
+        // extern distance_fn const distance;
 
         struct iter_size_fn;
-        extern iter_size_fn const iter_size;
+        // extern iter_size_fn const iter_size;
 
         template<typename I>
         struct iterator_difference;
@@ -327,13 +338,13 @@ namespace ranges
         struct compressed_tuple;
 
         struct make_invokable_fn;
-        extern make_invokable_fn const invokable;
+        // extern make_invokable_fn const invokable;
 
         struct bind_fn;
         extern bind_fn const bind;
 
-        template<typename T>
-        using invokable_t = decltype(invokable(std::declval<T>()));
+        // template<typename T>
+        // using invokable_t = decltype(invokable(std::declval<T>()));
 
         template<typename Derived, bool Inf = false>
         struct range_interface;
@@ -351,7 +362,7 @@ namespace ranges
         struct sized_range;
 
         struct make_range_fn;
-        extern make_range_fn const make_range;
+        // extern make_range_fn const make_range;
 
         template<typename I>
         struct iterator_value;

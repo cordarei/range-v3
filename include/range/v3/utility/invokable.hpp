@@ -40,7 +40,11 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR make_invokable_fn invokable {};
+        // RANGES_CONSTEXPR make_invokable_fn invokable {};
+        namespace
+        {
+          constexpr auto const & invokable = odr_detail::static_const<make_invokable_fn>::value;
+        }
 
         template<typename T>
         using invokable_t = decltype(invokable(std::declval<T>()));

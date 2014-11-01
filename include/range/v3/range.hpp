@@ -207,7 +207,11 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR make_range_fn make_range {};
+        // RANGES_CONSTEXPR make_range_fn make_range {};
+        namespace
+        {
+          constexpr auto const & make_range = odr_detail::static_const<make_range_fn>::value;
+        }
 
         // Tuple-like access
         template<std::size_t I, typename First, typename Second>

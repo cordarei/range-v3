@@ -89,7 +89,11 @@ namespace ranges
             };
         }
 
-        RANGES_CONSTEXPR adl_size_detail::size_fn size {};
+        // RANGES_CONSTEXPR adl_size_detail::size_fn size {};
+        namespace
+        {
+          constexpr auto const & size = odr_detail::static_const<adl_size_detail::size_fn>::value;
+        }
     }
 }
 

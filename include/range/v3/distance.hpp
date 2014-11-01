@@ -83,7 +83,11 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR distance_fn distance {};
+        // RANGES_CONSTEXPR distance_fn distance {};
+        namespace
+        {
+          constexpr auto const & distance = odr_detail::static_const<distance_fn>::value;
+        }
     }
 }
 

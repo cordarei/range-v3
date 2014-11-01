@@ -37,7 +37,11 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR advance_fn advance{};
+        // RANGES_CONSTEXPR advance_fn advance{};
+        namespace
+        {
+          constexpr auto const & advance = odr_detail::static_const<advance_fn>::value;
+        }
 
         struct advance_to_fn
         {
@@ -66,7 +70,11 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR advance_to_fn advance_to{};
+        // RANGES_CONSTEXPR advance_to_fn advance_to{};
+        namespace
+        {
+          constexpr auto const & advance_to = odr_detail::static_const<advance_to_fn>::value;
+        }
 
         struct advance_bounded_fn
         {
@@ -112,7 +120,11 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR advance_bounded_fn advance_bounded {};
+        // RANGES_CONSTEXPR advance_bounded_fn advance_bounded {};
+        namespace
+        {
+          constexpr auto const & advance_bounded = odr_detail::static_const<advance_bounded_fn>::value;
+        }
 
         struct next_fn
         {
@@ -124,7 +136,11 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR next_fn next{};
+        // RANGES_CONSTEXPR next_fn next{};
+        namespace
+        {
+          constexpr auto const & next = odr_detail::static_const<next_fn>::value;
+        }
 
         struct prev_fn
         {
@@ -136,7 +152,11 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR prev_fn prev {};
+        // RANGES_CONSTEXPR prev_fn prev {};
+        namespace
+        {
+          constexpr auto const & prev = odr_detail::static_const<prev_fn>::value;
+        }
 
         struct next_to_fn
         {
@@ -148,7 +168,11 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR next_to_fn next_to{};
+        // RANGES_CONSTEXPR next_to_fn next_to{};
+        namespace
+        {
+          constexpr auto const & next_to = odr_detail::static_const<next_to_fn>::value;
+        }
 
         struct iter_enumerate_fn
         {
@@ -219,7 +243,11 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR iter_size_fn iter_size {};
+        // RANGES_CONSTEXPR iter_size_fn iter_size {};
+        namespace
+        {
+          constexpr auto const & iter_size = odr_detail::static_const<iter_size_fn>::value;
+        }
 
         struct iter_swap_fn
         {

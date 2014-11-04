@@ -68,6 +68,7 @@ namespace ranges
             }
         };
 
+        inline
         lines_range lines(std::istream & sin)
         {
             return lines_range{sin};

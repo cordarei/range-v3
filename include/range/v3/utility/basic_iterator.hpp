@@ -600,14 +600,14 @@ namespace ranges
                 return !range_access::empty(left.pos(), right.end());
             }
             CONCEPT_REQUIRES(detail::RandomAccessCursor<Cur>())
-            friend constexpr bool operator<=(basic_iterator const &left,
-                basic_sentinel<S> const &right)
+            friend constexpr bool operator<=(basic_iterator const &/*left*/,
+                basic_sentinel<S> const &/*right*/)
             {
                 return true;
             }
             CONCEPT_REQUIRES(detail::RandomAccessCursor<Cur>())
-            friend constexpr bool operator>(basic_iterator const &left,
-                basic_sentinel<S> const &right)
+            friend constexpr bool operator>(basic_iterator const &/*left*/,
+                basic_sentinel<S> const &/*right*/)
             {
                 return false;
             }
@@ -618,8 +618,8 @@ namespace ranges
                 return range_access::empty(left.pos(), right.end());
             }
             CONCEPT_REQUIRES(detail::RandomAccessCursor<Cur>())
-            friend constexpr bool operator<(basic_sentinel<S> const &left,
-                basic_iterator const &right)
+            friend constexpr bool operator<(basic_sentinel<S> const &/*left*/,
+                basic_iterator const &/*right*/)
             {
                 return false;
             }
@@ -636,8 +636,8 @@ namespace ranges
                 return !range_access::empty(right.pos(), left.end());
             }
             CONCEPT_REQUIRES(detail::RandomAccessCursor<Cur>())
-            friend constexpr bool operator>=(basic_sentinel<S> const &left,
-                basic_iterator const &right)
+            friend constexpr bool operator>=(basic_sentinel<S> const &/*left*/,
+                basic_iterator const &/*right*/)
             {
                 return true;
             }

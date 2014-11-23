@@ -11,8 +11,11 @@
 
 #include <list>
 #include <vector>
+#include <string>
+#include <sstream>
 #include <range/v3/core.hpp>
 #include <range/v3/view/iota.hpp>
+#include <range/v3/istream_range.hpp>
 #include <range/v3/view/slice.hpp>
 #include <range/v3/view/reverse.hpp>
 #include "../simple_test.hpp"
@@ -61,6 +64,56 @@ int main()
     ::models<concepts::SizedRange>(rng4);
     static_assert(!ranges::is_infinite<decltype(rng4)>::value, "");
     ::check_equal(rng4, {20, 21, 22, 23, 24, 25, 26, 27, 28, 29});
+
+    auto rng5 = view::iota(10)[{10, 20}];
+    ::models<concepts::BoundedRange>(rng5);
+    ::models<concepts::SizedRange>(rng5);
+    static_assert(!ranges::is_infinite<decltype(rng5)>::value, "");
+    ::check_equal(rng5, {20, 21, 22, 23, 24, 25, 26, 27, 28, 29});
+
+    auto rng6 = view::all(l)[{3, 9}];
+    has_type<int &>(*begin(rng6));
+    models<concepts::Range>(rng6);
+    models_not<concepts::BoundedRange>(rng6);
+    models<concepts::SizedRange>(rng6);
+    models<concepts::BidirectionalIterator>(begin(rng6));
+    models_not<concepts::RandomAccessIterator>(begin(rng6));
+    ::check_equal(rng6, {3, 4, 5, 6, 7, 8});
+
+    auto rng7 = view::all(l)[{3, end}];
+    has_type<int &>(*begin(rng7));
+    models<concepts::Range>(rng7);
+    models<concepts::BoundedRange>(rng7);
+    models<concepts::SizedRange>(rng7);
+    models<concepts::BidirectionalIterator>(begin(rng7));
+    models_not<concepts::RandomAccessIterator>(begin(rng7));
+    ::check_equal(rng7, {3, 4, 5, 6, 7, 8, 9, 10});
+
+    auto rng8 = view::all(l)[{end-5,end-2}];
+    has_type<int &>(*begin(rng8));
+    models<concepts::Range>(rng8);
+    models_not<concepts::BoundedRange>(rng8);
+    models<concepts::SizedRange>(rng8);
+    models<concepts::BidirectionalIterator>(begin(rng8));
+    models_not<concepts::RandomAccessIterator>(begin(rng8));
+    ::check_equal(rng8, {6, 7, 8});
+
+    auto rng9 = view::ints(0)[{0,end}];
+    static_assert(is_infinite<decltype(rng9)>::value, "should be infinite");
+
+    {
+        std::string str{"0 1 2 3 4 5 6 7 8 9"};
+        std::stringstream sin{str};
+        auto rng10 = istream<int>(sin)[{3,9}];
+        ::check_equal(rng10, {3, 4, 5, 6, 7, 8});
+    }
+
+    {
+        std::string str{"0 1 2 3 4 5 6 7 8 9"};
+        std::stringstream sin{str};
+        auto rng11 = istream<int>(sin)[{3,end}];
+        ::check_equal(rng11, {3, 4, 5, 6, 7, 8, 9});
+    }
 
     return test_result();
 }

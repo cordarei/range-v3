@@ -54,10 +54,17 @@ namespace ranges
             struct cend_fn;
         }
 
+        using adl_begin_end_detail::begin_fn;
+        using adl_begin_end_detail::end_fn;
+        using adl_begin_end_detail::cbegin_fn;
+        using adl_begin_end_detail::cend_fn;
+
         namespace adl_size_detail
         {
             struct size_fn;
         }
+
+        using adl_size_detail::size_fn;
 
         template<typename ...Ts>
         struct common_type;
@@ -234,6 +241,9 @@ namespace ranges
             struct counted_cursor;
 
             struct counted_sentinel;
+
+            template<typename Int>
+            struct from_end_;
 
 #if !defined(__GLIBCXX__)
             template<typename T>

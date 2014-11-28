@@ -19,7 +19,6 @@
 #include <range/v3/range_traits.hpp>
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 
 namespace ranges
 {
@@ -58,7 +57,7 @@ namespace ranges
                 }
             };
 
-            RANGES_CONSTEXPR upper_bound_n_fn upper_bound_n {};
+            constexpr upper_bound_n_fn upper_bound_n {};
         }
     } // namespace v3
 } // namespace ranges

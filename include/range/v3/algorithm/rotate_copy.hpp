@@ -19,7 +19,6 @@
 #include <range/v3/range_traits.hpp>
 #include <range/v3/utility/iterator_concepts.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/algorithm/copy.hpp>
 
@@ -49,7 +48,7 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR rotate_copy_fn rotate_copy{};
+        constexpr rotate_copy_fn rotate_copy{};
 
     } // namespace v3
 } // namespace ranges

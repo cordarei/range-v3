@@ -21,7 +21,6 @@
 #include <range/v3/utility/iterator_traits.hpp>
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/utility/invokable.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 #include <range/v3/algorithm/heap_algorithm.hpp>
 
 namespace ranges
@@ -33,7 +32,7 @@ namespace ranges
             typename VO = iterator_value_t<O>,
             typename XI = concepts::Invokable::result_t<PI, VI>,
             typename XO = concepts::Invokable::result_t<PO, VO>>
-        using PartialSortCopyConcept = fast_logical_and<
+        using PartialSortCopyConcept = meta::fast_and<
             InputIterator<I>,
             RandomAccessIterator<O>,
             IndirectlyCopyable<I, O>,
@@ -86,7 +85,7 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR range_algorithm<partial_sort_copy_fn> partial_sort_copy {};
+        constexpr with_braced_init_args<partial_sort_copy_fn> partial_sort_copy {};
 
     } // namespace v3
 } // namespace ranges

@@ -21,7 +21,6 @@
 #include <range/v3/utility/iterator.hpp>
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/utility/invokable.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 
 namespace ranges
 {
@@ -57,7 +56,7 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR min_element_fn min_element{};
+        constexpr min_element_fn min_element{};
 
     } // namespace v3
 } // namespace ranges

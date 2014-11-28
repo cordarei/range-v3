@@ -18,7 +18,6 @@
 #include <range/v3/range_concepts.hpp>
 #include <range/v3/utility/invokable.hpp>
 #include <range/v3/utility/functional.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
 #include <range/v3/utility/iterator_concepts.hpp>
 
@@ -35,7 +34,7 @@ namespace ranges
                 typename X2 = concepts::Invokable::result_t<P2, V2>,
                 typename Y2 = concepts::Invokable::result_t<BOp2, X1, X2>,
                 typename Y1 = concepts::Invokable::result_t<BOp1, T, Y2>>
-        using InnerProductable = fast_logical_and<
+        using InnerProductable = meta::fast_and<
             InputIterator<I1>,
             InputIterator<I2>,
             Invokable<P1, V1>,
@@ -119,7 +118,7 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR range_algorithm<inner_product_fn> inner_product{};
+        constexpr with_braced_init_args<inner_product_fn> inner_product{};
     }
 }
 

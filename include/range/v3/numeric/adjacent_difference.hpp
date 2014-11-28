@@ -21,7 +21,6 @@
 #include <range/v3/range_concepts.hpp>
 #include <range/v3/utility/invokable.hpp>
 #include <range/v3/utility/functional.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
 #include <range/v3/utility/iterator_concepts.hpp>
 
@@ -33,7 +32,7 @@ namespace ranges
                   typename V = iterator_value_t<I>,
                   typename X = concepts::Invokable::result_t<P, V>,
                   typename Y = concepts::Invokable::result_t<BOp, X, X>>
-        using AdjacentDifferentiable = fast_logical_and<
+        using AdjacentDifferentiable = meta::fast_and<
             InputIterator<I>,
             WeakOutputIterator<O, X>,
             WeakOutputIterator<O, Y>,
@@ -126,7 +125,7 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR adjacent_difference_fn adjacent_difference{};
+        constexpr adjacent_difference_fn adjacent_difference{};
     }
 }
 

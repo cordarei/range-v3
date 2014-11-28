@@ -19,7 +19,6 @@
 #include <range/v3/range_traits.hpp>
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 #include <range/v3/algorithm/aux_/lower_bound_n.hpp>
 
 namespace ranges
@@ -47,7 +46,7 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR lower_bound_fn lower_bound{};
+        constexpr lower_bound_fn lower_bound{};
 
     } // namespace v3
 } // namespace ranges

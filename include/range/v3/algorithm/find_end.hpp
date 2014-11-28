@@ -17,10 +17,10 @@
 #include <range/v3/begin_end.hpp>
 #include <range/v3/range_concepts.hpp>
 #include <range/v3/range_traits.hpp>
+#include <range/v3/utility/meta.hpp>
 #include <range/v3/utility/iterator_concepts.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
 #include <range/v3/utility/functional.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 
 namespace ranges
 {
@@ -44,9 +44,9 @@ namespace ranges
 
             template<bool B, typename I, typename S,
                 CONCEPT_REQUIRES_(InputIterator<I>() && IteratorRange<I, S>())>
-            conditional_t<B, I, S> next_to_if(I i, S s)
+            meta::if_c<B, I, S> next_to_if(I i, S s)
             {
-                return detail::next_to_if(std::move(i), std::move(s), bool_constant<B>{});
+                return detail::next_to_if(std::move(i), std::move(s), meta::bool_<B>{});
             }
         }
 
@@ -198,7 +198,7 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR range_algorithm<find_end_fn> find_end{};
+        constexpr with_braced_init_args<find_end_fn> find_end{};
 
     } // namespace v3
 } // namespace ranges

@@ -29,7 +29,7 @@
 #include <range/v3/utility/iterator.hpp>
 #include <range/v3/utility/iterator_concepts.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
+#include <range/v3/utility/functional.hpp>
 
 namespace ranges
 {
@@ -38,7 +38,7 @@ namespace ranges
         template<typename I, typename V, typename C = equal_to, typename P = ident,
             typename IV = iterator_value_t<I>,
             typename X1 = concepts::Invokable::result_t<P, IV>>
-        using Searchnable = fast_logical_and<
+        using Searchnable = meta::fast_and<
             ForwardIterator<I>,
             Invokable<P, IV>,
             InvokableRelation<C, X1, V>>;
@@ -185,7 +185,7 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR search_n_fn search_n{};
+        constexpr search_n_fn search_n{};
 
     } // namespace v3
 } // namespace ranges

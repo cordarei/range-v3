@@ -5,8 +5,8 @@ endif()
 
 set(CMAKE_CXX_COMPILER_FLAGS "${CMAKE_CXX_COMPILER_FLAGS} -g")
 
+add_subdirectory(action)
 add_subdirectory(algorithm)
-add_subdirectory(container)
 add_subdirectory(numeric)
 add_subdirectory(utility)
 add_subdirectory(view)
@@ -25,3 +25,6 @@ add_test(test.range range)
 
 add_executable(multiple multiple1.cpp multiple2.cpp)
 add_test(test.multiple multiple)
+
+add_executable(distance distance.cpp)
+add_test(test.distance distance)

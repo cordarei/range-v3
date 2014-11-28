@@ -30,7 +30,6 @@
 #include <range/v3/utility/iterator_traits.hpp>
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/utility/invokable.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 
 namespace ranges
 {
@@ -39,7 +38,7 @@ namespace ranges
         template<typename I, typename C, typename P = ident,
             typename V = iterator_value_t<I>,
             typename X = concepts::Invokable::result_t<P, V>>
-        using PartitionPointable = fast_logical_and<
+        using PartitionPointable = meta::fast_and<
             ForwardIterator<I>,
             Invokable<P, V>,
             InvokablePredicate<C, X>>;
@@ -78,7 +77,7 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR partition_point_fn partition_point{};
+        constexpr partition_point_fn partition_point{};
 
     } // namespace v3
 } // namespace ranges

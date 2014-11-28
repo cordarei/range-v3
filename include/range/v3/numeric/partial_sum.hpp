@@ -18,7 +18,6 @@
 #include <range/v3/range_concepts.hpp>
 #include <range/v3/utility/invokable.hpp>
 #include <range/v3/utility/functional.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
 #include <range/v3/utility/iterator_concepts.hpp>
 
@@ -30,7 +29,7 @@ namespace ranges
                   typename V = iterator_value_t<I>,
                   typename X = concepts::Invokable::result_t<P, V>,
                   typename Y = concepts::Invokable::result_t<BOp, X, X>>
-        using PartialSummable = fast_logical_and<
+        using PartialSummable = meta::fast_and<
             InputIterator<I>,
             WeakOutputIterator<O, X>,
             Invokable<P, V>,
@@ -122,7 +121,7 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR partial_sum_fn partial_sum{};
+        constexpr partial_sum_fn partial_sum{};
     }
 }
 

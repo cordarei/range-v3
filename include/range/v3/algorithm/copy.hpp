@@ -22,7 +22,6 @@
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
 #include <range/v3/utility/iterator_concepts.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 #include <range/v3/utility/copy.hpp>
 
 namespace ranges
@@ -62,7 +61,7 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR copy_fn copy{};
+        constexpr copy_fn copy{};
 
     } // namespace v3
 } // namespace ranges

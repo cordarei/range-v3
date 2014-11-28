@@ -20,7 +20,6 @@
 #include <range/v3/utility/iterator_traits.hpp>
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/utility/invokable.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 
 namespace ranges
 {
@@ -29,7 +28,7 @@ namespace ranges
         template<typename I, typename O, typename C, typename T, typename P = ident,
             typename V = iterator_value_t<I>,
             typename X = concepts::Invokable::result_t<P, V>>
-        using ReplaceCopyIfable = fast_logical_and<
+        using ReplaceCopyIfable = meta::fast_and<
             InputIterator<I>,
             WeakOutputIterator<O, T>,
             IndirectlyCopyable<I, O>,
@@ -61,7 +60,7 @@ namespace ranges
             }
         };
 
-        RANGES_CONSTEXPR replace_copy_if_fn replace_copy_if{};
+        constexpr replace_copy_if_fn replace_copy_if{};
 
     } // namespace v3
 } // namespace ranges

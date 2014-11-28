@@ -36,7 +36,6 @@
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/utility/iterator.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
-#include <range/v3/utility/range_algorithm.hpp>
 #include <range/v3/algorithm/copy_n.hpp>
 
 namespace ranges
@@ -95,7 +94,7 @@ namespace ranges
                 }
             };
 
-            RANGES_CONSTEXPR merge_n_fn merge_n{};
+            constexpr merge_n_fn merge_n{};
         }
     } // namespace v3
 } // namespace ranges

@@ -47,6 +47,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \cond
         namespace detail
         {
             struct merge_adaptive_fn
@@ -78,7 +79,7 @@ namespace ranges
                               std::move_iterator<Rv>{Rv{p.base().base()}},
                               std::move_iterator<Rv>{Rv{buf}},
                               RBi{std::move(end)},
-                              not_fn(std::ref(pred)), std::ref(proj), std::ref(proj));
+                              not_(std::ref(pred)), std::ref(proj), std::ref(proj));
                     }
                 }
 
@@ -189,8 +190,11 @@ namespace ranges
             };
 
             constexpr inplace_merge_no_buffer_fn inplace_merge_no_buffer {};
-        };
+        }
+        /// \endcond
 
+        /// \addtogroup group-algorithms
+        /// @{
         struct inplace_merge_fn
         {
             // TODO reimplement to only need forward iterators
@@ -223,8 +227,11 @@ namespace ranges
             }
         };
 
+        /// \sa `inplace_merge_fn`
+        /// \ingroup group-algorithms
         constexpr inplace_merge_fn inplace_merge {};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

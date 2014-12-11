@@ -27,6 +27,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-views
+        /// @{
         template<typename Val>
         struct single_view
           : range_facade<single_view<Val>>
@@ -40,22 +42,39 @@ namespace ranges
                 Val value_;
                 bool done_;
             public:
-                using single_pass = std::true_type;
                 cursor() = default;
                 cursor(Val value)
                   : value_(std::move(value)), done_(false)
                 {}
+                Val current() const
+                {
+                    return value_;
+                }
                 bool done() const
                 {
                     return done_;
+                }
+                bool equal(cursor const &that) const
+                {
+                    return done_ == that.done_;
                 }
                 void next()
                 {
                     done_ = true;
                 }
-                Val current() const
+                void prev()
                 {
-                    return value_;
+                    done_ = false;
+                }
+                void advance(std::ptrdiff_t n)
+                {
+                    n += done_;
+                    RANGES_ASSERT(n == 0 || n == 1);
+                    done_ = n != 0;
+                }
+                std::ptrdiff_t distance_to(cursor const &that) const
+                {
+                    return that.done_ - done_;
                 }
             };
             cursor begin_cursor() const
@@ -77,15 +96,29 @@ namespace ranges
         {
             struct single_fn
             {
-                template<typename Val>
+                template<typename Val, CONCEPT_REQUIRES_(SemiRegular<Val>())>
                 single_view<Val> operator()(Val value) const
                 {
                     return single_view<Val>{std::move(value)};
                 }
+            #ifndef RANGES_DOXYGEN_INVOKED
+                // For error reporting
+                template<typename Val, CONCEPT_REQUIRES_(!SemiRegular<Val>())>
+                void operator()(Val &&) const
+                {
+                    CONCEPT_ASSERT_MSG(SemiRegular<Val>(),
+                        "The object passed to view::single must be a model of the SemiRegular "
+                        "concept; that is, it needs to be default constructible, copy and move "
+                        " constructible, and destructible.");
+                }
+            #endif
             };
 
-            constexpr single_fn single {};
+            /// \sa `single_fn`
+            /// \ingroup group-views
+            constexpr single_fn single{};
         }
+        /// @}
     }
 }
 

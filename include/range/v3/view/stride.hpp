@@ -26,14 +26,17 @@
 #include <range/v3/utility/box.hpp>
 #include <range/v3/utility/pipeable.hpp>
 #include <range/v3/utility/iterator.hpp>
+#include <range/v3/view/view.hpp>
 
 namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-views
+        /// @{
         template<typename Rng>
-        struct strided_view
-          : range_adaptor<strided_view<Rng>, Rng>
+        struct stride_view
+          : range_adaptor<stride_view<Rng>, Rng>
         {
         private:
             friend range_access;
@@ -66,7 +69,7 @@ namespace ranges
             {
             private:
                 using iterator = ranges::range_iterator_t<Rng>;
-                strided_view const *rng_;
+                stride_view const *rng_;
                 dirty_t & dirty() { return *this; }
                 dirty_t const & dirty() const { return *this; }
                 offset_t & offset() { return *this; }
@@ -88,10 +91,10 @@ namespace ranges
                 }
             public:
                 adaptor() = default;
-                adaptor(strided_view const &rng, begin_tag)
+                adaptor(stride_view const &rng, begin_tag)
                   : dirty_t(false), offset_t(0), rng_(&rng)
                 {}
-                adaptor(strided_view const &rng, end_tag)
+                adaptor(stride_view const &rng, end_tag)
                   : dirty_t(true), offset_t(0), rng_(&rng)
                 {
                     // Opportunistic eager cleaning when we can do so in O(1)
@@ -155,9 +158,9 @@ namespace ranges
                 return {*this, end_tag{}};
             }
         public:
-            strided_view() = default;
-            strided_view(Rng &&rng, difference_type_ stride)
-              : range_adaptor_t<strided_view>{std::forward<Rng>(rng)}
+            stride_view() = default;
+            stride_view(Rng &&rng, difference_type_ stride)
+              : range_adaptor_t<stride_view>{std::forward<Rng>(rng)}
               , stride_(stride)
             {
                 RANGES_ASSERT(0 < stride_);
@@ -174,23 +177,54 @@ namespace ranges
         {
             struct stride_fn
             {
-                template<typename Rng>
-                strided_view<Rng> operator()(Rng && rng, range_difference_t<Rng> step) const
+            private:
+                friend view_access;
+                template<typename Difference, CONCEPT_REQUIRES_(Integral<Difference>())>
+                static auto bind(stride_fn stride, Difference step)
+                RANGES_DECLTYPE_AUTO_RETURN
+                (
+                    make_pipeable(std::bind(stride, std::placeholders::_1, std::move(step)))
+                )
+            #ifndef RANGES_DOXYGEN_INVOKED
+                template<typename Difference, CONCEPT_REQUIRES_(!Integral<Difference>())>
+                static detail::null_pipe bind(stride_fn, Difference &&)
                 {
-                    CONCEPT_ASSERT(InputIterable<Rng>());
+                    CONCEPT_ASSERT_MSG(Integral<Difference>(),
+                        "The value to be used as the step in a call to view::stride must be a "
+                        "model of the Integral concept that is convertible to the range's "
+                        "difference type.");
+                    return {};
+                }
+            #endif
+
+            public:
+                template<typename Rng, CONCEPT_REQUIRES_(InputIterable<Rng>())>
+                stride_view<Rng> operator()(Rng && rng, range_difference_t<Rng> step) const
+                {
                     return {std::forward<Rng>(rng), step};
                 }
 
-                template<typename Difference, CONCEPT_REQUIRES_(Integral<Difference>())>
-                auto operator()(Difference step) const ->
-                    decltype(make_pipeable(std::bind(*this, std::placeholders::_1, std::move(step))))
+            #ifndef RANGES_DOXYGEN_INVOKED
+                template<typename Rng, typename T,
+                    CONCEPT_REQUIRES_(!InputIterable<Rng>())>
+                void operator()(Rng &&, T &&) const
                 {
-                    return make_pipeable(std::bind(*this, std::placeholders::_1, std::move(step)));
+                    CONCEPT_ASSERT_MSG(InputIterable<Rng>(),
+                        "The object to be operated on by view::stride should be a model of the "
+                        "InputIterable concept.");
+                    CONCEPT_ASSERT_MSG(Integral<T>(),
+                        "The value to be used as the step in a call to view::stride must be a "
+                        "model of the Integral concept that is convertible to the range's "
+                        "difference type.");
                 }
+            #endif
             };
 
-            constexpr stride_fn stride{};
+            /// \sa `stride_fn`
+            /// \ingroup group-views
+            constexpr view<stride_fn> stride{};
         }
+        /// @}
     }
 }
 

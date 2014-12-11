@@ -25,6 +25,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct lexicographical_compare_fn
         {
             template<typename I0, typename S0, typename I1, typename S1,
@@ -61,8 +63,11 @@ namespace ranges
             }
         };
 
+        /// \sa `lexicographical_compare_fn`
+        /// \ingroup group-algorithms
         constexpr with_braced_init_args<lexicographical_compare_fn> lexicographical_compare{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

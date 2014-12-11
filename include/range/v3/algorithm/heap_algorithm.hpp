@@ -36,6 +36,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \ingroup group-concepts
         template<typename I, typename C = ordered_less, typename P = ident,
             typename V = iterator_value_t<I>,
             typename X = concepts::Invokable::result_t<P, V>>
@@ -44,6 +45,7 @@ namespace ranges
             Invokable<P, V>,
             InvokableRelation<C, X>>;
 
+        /// \cond
         namespace detail
         {
             struct is_heap_until_n_fn
@@ -88,7 +90,10 @@ namespace ranges
 
             constexpr is_heap_n_fn is_heap_n {};
         }
+        /// \endcond
 
+        /// \addtogroup group-algorithms
+        /// @{
         struct is_heap_until_fn
         {
             template<typename I, typename S, typename C = ordered_less, typename P = ident,
@@ -108,6 +113,8 @@ namespace ranges
             }
         };
 
+        /// \sa `is_heap_until_fn`
+        /// \ingroup group-algorithms
         constexpr is_heap_until_fn is_heap_until {};
 
         struct is_heap_fn
@@ -129,8 +136,12 @@ namespace ranges
             }
         };
 
+        /// \sa `is_heap_fn`
+        /// \ingroup group-algorithms
         constexpr with_braced_init_args<is_heap_fn> is_heap {};
+        /// @}
 
+        /// \cond
         namespace detail
         {
             struct sift_up_n_fn
@@ -224,7 +235,10 @@ namespace ranges
 
             constexpr sift_down_n_fn sift_down_n{};
         }
+        /// \endcond
 
+        /// \addtogroup group-algorithms
+        /// @{
         struct push_heap_fn
         {
             template<typename I, typename S, typename C = ordered_less, typename P = ident,
@@ -248,8 +262,12 @@ namespace ranges
             }
         };
 
+        /// \sa `push_heap_fn`
+        /// \ingroup group-algorithms
         constexpr push_heap_fn push_heap {};
+        /// @}
 
+        /// \cond
         namespace detail
         {
             struct pop_heap_n_fn
@@ -269,7 +287,10 @@ namespace ranges
 
             constexpr pop_heap_n_fn pop_heap_n{};
         }
+        /// \endcond
 
+        /// \addtogroup group-algorithms
+        /// @{
         struct pop_heap_fn
         {
             template<typename I, typename S, typename C = ordered_less, typename P = ident,
@@ -293,6 +314,8 @@ namespace ranges
             }
         };
 
+        /// \sa `pop_heap_fn`
+        /// \ingroup group-algorithms
         constexpr pop_heap_fn pop_heap {};
 
         struct make_heap_fn
@@ -328,6 +351,8 @@ namespace ranges
             }
         };
 
+        /// \sa `make_heap_fn`
+        /// \ingroup group-algorithms
         constexpr make_heap_fn make_heap {};
 
         struct sort_heap_fn
@@ -359,8 +384,11 @@ namespace ranges
             }
         };
 
+        /// \sa `sort_heap_fn`
+        /// \ingroup group-algorithms
         constexpr sort_heap_fn sort_heap {};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

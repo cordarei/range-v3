@@ -27,6 +27,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \ingroup group-concepts
         template<typename I, typename O, typename C = ordered_less, typename PI = ident, typename PO = ident,
             typename VI = iterator_value_t<I>,
             typename VO = iterator_value_t<O>,
@@ -39,6 +40,8 @@ namespace ranges
             InvokableRelation<C, XI, XO>,
             Sortable<O, C, PO>>;
 
+        /// \addtogroup group-algorithms
+        /// @{
         struct partial_sort_copy_fn
         {
             template<typename I, typename SI, typename O, typename SO, typename C = ordered_less,
@@ -85,8 +88,11 @@ namespace ranges
             }
         };
 
+        /// \sa `partial_sort_copy_fn`
+        /// \ingroup group-algorithms
         constexpr with_braced_init_args<partial_sort_copy_fn> partial_sort_copy {};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

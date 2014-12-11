@@ -27,6 +27,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct move_fn : aux::move_fn
         {
             using aux::move_fn::operator();
@@ -52,8 +54,11 @@ namespace ranges
             }
         };
 
+        /// \sa `move_fn`
+        /// \ingroup group-algorithms
         constexpr move_fn move{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

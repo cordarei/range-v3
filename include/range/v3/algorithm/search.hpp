@@ -35,6 +35,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \ingroup group-concepts
         template<typename I1, typename I2, typename C = equal_to, typename P1 = ident,
             typename P2 = ident>
         using Searchable = meta::fast_and<
@@ -42,6 +43,8 @@ namespace ranges
             ForwardIterator<I2>,
             Comparable<I1, I2, C, P1, P2>>;
 
+        /// \addtogroup group-algorithms
+        /// @{
         struct search_fn
         {
         private:
@@ -198,8 +201,11 @@ namespace ranges
             }
         };
 
+        /// \sa `search_fn`
+        /// \ingroup group-algorithms
         constexpr with_braced_init_args<search_fn> search{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

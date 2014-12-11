@@ -25,6 +25,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-actions
+        /// @{
         namespace action
         {
             struct transform_fn
@@ -48,8 +50,12 @@ namespace ranges
                 }
             };
 
+            /// \ingroup group-actions
+            /// \sa transform_fn
+            /// \sa action
             constexpr action<transform_fn> transform{};
         }
+        /// @}
     }
 }
 

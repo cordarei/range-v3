@@ -22,6 +22,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct fill_fn
         {
             template<typename O, typename S, typename V,
@@ -42,8 +44,11 @@ namespace ranges
             }
         };
 
+        /// \sa `fill_fn`
+        /// \ingroup group-algorithms
         constexpr fill_fn fill{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

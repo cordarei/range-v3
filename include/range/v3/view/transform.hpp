@@ -23,18 +23,20 @@
 #include <range/v3/range_traits.hpp>
 #include <range/v3/range_adaptor.hpp>
 #include <range/v3/utility/meta.hpp>
-#include <range/v3/utility/pipeable.hpp>
 #include <range/v3/utility/invokable.hpp>
 #include <range/v3/utility/optional.hpp>
 #include <range/v3/utility/functional.hpp>
+#include <range/v3/view/view.hpp>
 
 namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-views
+        /// @{
         template<typename Rng, typename Fun>
-        struct transformed_view
-          : range_adaptor<transformed_view<Rng, Fun>, Rng>
+        struct transform_view
+          : range_adaptor<transform_view<Rng, Fun>, Rng>
         {
         private:
             friend range_access;
@@ -53,7 +55,7 @@ namespace ranges
             private:
                 semiregular_invokable_ref_t<Fun, IsConst> fun_;
             public:
-                using single_pass = transformed_view::single_pass;
+                using single_pass = transform_view::single_pass;
                 adaptor() = default;
                 adaptor(semiregular_invokable_ref_t<Fun, IsConst> fun)
                   : fun_(std::move(fun))
@@ -91,9 +93,9 @@ namespace ranges
                 return {fun_};
             }
         public:
-            transformed_view() = default;
-            transformed_view(Rng && rng, Fun fun)
-              : range_adaptor_t<transformed_view>{std::forward<Rng>(rng)}
+            transform_view() = default;
+            transform_view(Rng && rng, Fun fun)
+              : range_adaptor_t<transform_view>{std::forward<Rng>(rng)}
               , fun_(invokable(std::move(fun)))
             {}
             CONCEPT_REQUIRES(SizedIterable<Rng>())
@@ -107,24 +109,46 @@ namespace ranges
         {
             struct transform_fn
             {
+            private:
+                friend view_access;
+                template<typename Fun>
+                static auto bind(transform_fn transform, Fun fun)
+                RANGES_DECLTYPE_AUTO_RETURN
+                (
+                    make_pipeable(std::bind(transform, std::placeholders::_1, protect(std::move(fun))))
+                )
+            public:
                 template<typename Rng, typename Fun>
-                transformed_view<Rng, Fun> operator()(Rng && rng, Fun fun) const
+                using Concept = meta::and_<
+                    InputIterable<Rng>,
+                    Invokable<Fun, range_value_t<Rng>>>;
+
+                template<typename Rng, typename Fun,
+                    CONCEPT_REQUIRES_(Concept<Rng, Fun>())>
+                transform_view<Rng, Fun> operator()(Rng && rng, Fun fun) const
                 {
-                    CONCEPT_ASSERT(InputIterable<Rng>());
-                    CONCEPT_ASSERT(Invokable<Fun, range_value_t<Rng>>());
                     return {std::forward<Rng>(rng), std::move(fun)};
                 }
-
-                template<typename Fun>
-                auto operator()(Fun fun) const ->
-                    decltype(make_pipeable(std::bind(*this, std::placeholders::_1, protect(std::move(fun)))))
+            #ifndef RANGES_DOXYGEN_INVOKED
+                template<typename Rng, typename Fun,
+                    CONCEPT_REQUIRES_(!Concept<Rng, Fun>())>
+                void operator()(Rng && rng, Fun fun) const
                 {
-                    return make_pipeable(std::bind(*this, std::placeholders::_1, protect(std::move(fun))));
+                    CONCEPT_ASSERT_MSG(InputIterable<Rng>(),
+                        "The object on which view::transform operates must be a model of the "
+                        "InputIterable concept.");
+                    CONCEPT_ASSERT_MSG(Invokable<Fun, range_value_t<Rng>>(),
+                        "The function passed to view::transform must be callable with objects "
+                        "of the range's value type.");
                 }
+            #endif
             };
 
-            constexpr transform_fn transform {};
+            /// \sa `transform_fn`
+            /// \ingroup group-views
+            constexpr view<transform_fn> transform{};
         }
+        /// @}
     }
 }
 

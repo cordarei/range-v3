@@ -25,6 +25,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-actions
+        /// @{
         namespace action
         {
             struct stride_fn
@@ -61,8 +63,12 @@ namespace ranges
                 }
             };
 
+            /// \ingroup group-actions
+            /// \sa stride_fn
+            /// \sa action
             constexpr action<stride_fn> stride{};
         }
+        /// @}
     }
 }
 

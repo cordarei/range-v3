@@ -10,61 +10,73 @@
 // Project home: https://github.com/ericniebler/range-v3
 
 #include <vector>
+#include <iterator>
+#include <functional>
 #include <range/v3/core.hpp>
 #include <range/v3/view/join.hpp>
-#include <range/v3/view/reverse.hpp>
+#include <range/v3/view/split.hpp>
+#include <range/v3/view/generate_n.hpp>
 #include "../simple_test.hpp"
 #include "../test_utils.hpp"
+#include "../test_iterators.hpp"
+
+static int N = 0;
+auto const make_input_rng = []
+{
+    using ranges::view::generate_n;
+    return generate_n([](){
+        return generate_n([](){
+            return N++;
+        },3);
+    },3);
+};
 
 int main()
 {
     using namespace ranges;
 
-    std::vector<std::string> his_face{"this", "is", "his", "face"};
-    std::vector<std::string> another_mess{"another", "fine", "mess"};
-    auto joined = view::join(his_face, another_mess);
-    ::models<concepts::RandomAccessRange>(joined);
-    static_assert(std::is_same<range_reference_t<decltype(joined)>, std::string &>::value, "");
-    CHECK(joined.size() == 7u);
-    CHECK((joined.end() - joined.begin()) == 7);
-    ::check_equal(joined | view::reverse, {"mess", "fine", "another", "face", "his", "is", "this"});
+    // Test that we can join an input range of input ranges:
+    auto rng0 = make_input_rng() | view::join;
+    models<concepts::InputIterable>(rng0);
+    models_not<concepts::ForwardIterable>(rng0);
+    models_not<concepts::BoundedIterable>(rng0);
+    models_not<concepts::SizedIterable>(rng0);
+    check_equal(rng0, {0,1,2,3,4,5,6,7,8});
 
-    auto revjoin = joined | view::reverse;
-    CHECK((revjoin.end() - revjoin.begin()) == 7);
+    // Joining with a value
+    N = 0;
+    auto rng1 = make_input_rng() | view::join(42);
+    models<concepts::InputIterable>(rng1);
+    models_not<concepts::ForwardIterable>(rng1);
+    models_not<concepts::BoundedIterable>(rng1);
+    models_not<concepts::SizedIterable>(rng1);
+    check_equal(rng1, {0,1,2,42,3,4,5,42,6,7,8});
 
-    auto begin = joined.begin();
-    CHECK(*(begin+0) == "this");
-    CHECK(*(begin+1) == "is");
-    CHECK(*(begin+2) == "his");
-    CHECK(*(begin+3) == "face");
-    CHECK(*(begin+4) == "another");
-    CHECK(*(begin+5) == "fine");
-    CHECK(*(begin+6) == "mess");
+    // Joining with a range
+    N = 0;
+    int rgi[] = {42,43};
+    auto rng2 = make_input_rng() | view::join(rgi);
+    models<concepts::InputIterable>(rng2);
+    models_not<concepts::ForwardIterable>(rng2);
+    models_not<concepts::BoundedIterable>(rng2);
+    models_not<concepts::SizedIterable>(rng2);
+    check_equal(rng2, {0,1,2,42,43,3,4,5,42,43,6,7,8});
 
-    CHECK(*(begin) == "this");
-    CHECK(*(begin+=1) == "is");
-    CHECK(*(begin+=1) == "his");
-    CHECK(*(begin+=1) == "face");
-    CHECK(*(begin+=1) == "another");
-    CHECK(*(begin+=1) == "fine");
-    CHECK(*(begin+=1) == "mess");
+    // Just for fun:
+    std::string str = "Now,is,the,time,for,all,good,men,to,come,to,the,aid,of,their,country";
+    std::string res = str | view::split(',') | view::join(' ');
+    CHECK(res == "Now is the time for all good men to come to the aid of their country");
 
-    auto end = joined.end();
-    CHECK(*(end-1) == "mess");
-    CHECK(*(end-2) == "fine");
-    CHECK(*(end-3) == "another");
-    CHECK(*(end-4) == "face");
-    CHECK(*(end-5) == "his");
-    CHECK(*(end-6) == "is");
-    CHECK(*(end-7) == "this");
+    std::vector<std::string> vs{"This","is","his","face"};
+    auto rng3 = view::join(vs);
+    models<concepts::SizedIterable>(rng3);
+    CHECK(rng3.size() == 13u);
+    CHECK(to_<std::string>(rng3) == "Thisishisface");
 
-    CHECK(*(end-=1) == "mess");
-    CHECK(*(end-=1) == "fine");
-    CHECK(*(end-=1) == "another");
-    CHECK(*(end-=1) == "face");
-    CHECK(*(end-=1) == "his");
-    CHECK(*(end-=1) == "is");
-    CHECK(*(end-=1) == "this");
+    auto rng4 = view::join(vs, ' ');
+    models<concepts::SizedIterable>(rng4);
+    CHECK(rng4.size() == 16u);
+    CHECK(to_<std::string>(rng4) == "This is his face");
 
-    return test_result();
+    return ::test_result();
 }

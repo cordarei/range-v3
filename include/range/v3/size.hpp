@@ -21,6 +21,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \cond
         namespace adl_size_detail
         {
             template<typename Rng>
@@ -88,7 +89,10 @@ namespace ranges
                 }
             };
         }
+        /// \endcond
 
+        /// \ingroup group-core
+        /// \return The result of an unqualified call to `size`
         constexpr adl_size_detail::size_fn size {};
     }
 }

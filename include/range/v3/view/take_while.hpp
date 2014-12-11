@@ -20,19 +20,21 @@
 #include <range/v3/range_concepts.hpp>
 #include <range/v3/range_adaptor.hpp>
 #include <range/v3/utility/meta.hpp>
-#include <range/v3/utility/pipeable.hpp>
 #include <range/v3/utility/invokable.hpp>
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/utility/iterator_concepts.hpp>
 #include <range/v3/utility/iterator_concepts.hpp>
+#include <range/v3/view/view.hpp>
 
 namespace ranges
 {
     inline namespace v3
     {
-        template<typename Rng, typename Pred>
+        /// \addtogroup group-views
+        /// @{
+        template<typename Rng, typename Pred, bool Inf /*= is_infinite<Rng>::value*/>
         struct take_while_view
-          : range_adaptor<take_while_view<Rng, Pred>, Rng>
+          : range_adaptor<take_while_view<Rng, Pred, Inf>, Rng, Inf>
         {
         private:
             friend range_access;
@@ -83,22 +85,46 @@ namespace ranges
         {
             struct take_while_fn
             {
+            private:
+                friend view_access;
+                template<typename Pred>
+                static auto bind(take_while_fn take_while, Pred pred)
+                RANGES_DECLTYPE_AUTO_RETURN
+                (
+                    make_pipeable(std::bind(take_while, std::placeholders::_1, protect(std::move(pred))))
+                )
+            public:
+                template<typename Rng, typename Pred>
+                using Concept = meta::and_<
+                    InputIterable<Rng>,
+                    InvokablePredicate<Pred, range_value_t<Rng>>>;
+
                 template<typename Rng, typename Pred,
-                    CONCEPT_REQUIRES_(Iterable<Rng>())>
+                    CONCEPT_REQUIRES_(Concept<Rng, Pred>())>
                 take_while_view<Rng, Pred> operator()(Rng && rng, Pred pred) const
                 {
                     return {std::forward<Rng>(rng), std::move(pred)};
                 }
-                template<typename Pred>
-                auto operator()(Pred pred) const
-                RANGES_DECLTYPE_AUTO_RETURN
-                (
-                    make_pipeable(std::bind(*this, std::placeholders::_1, protect(std::move(pred))))
-                )
+            #ifndef RANGES_DOXYGEN_INVOKED
+                template<typename Rng, typename Pred,
+                    CONCEPT_REQUIRES_(!Concept<Rng, Pred>())>
+                void operator()(Rng &&, Pred) const
+                {
+                    CONCEPT_ASSERT_MSG(InputIterable<Rng>(),
+                        "The object on which view::take_while operates must be a model of the InputIterable "
+                        "concept.");
+                    CONCEPT_ASSERT_MSG(InvokablePredicate<Pred, range_value_t<Rng>>(),
+                        "The function passed to view::take_while must be callable with objects of "
+                        "the range's value type, and its result type must be convertible to bool.");
+                }
+            #endif
             };
 
-            constexpr take_while_fn take_while{};
+            /// \sa `take_while_fn`
+            /// \ingroup group-views
+            constexpr view<take_while_fn> take_while{};
         }
+        /// @}
     }
 }
 

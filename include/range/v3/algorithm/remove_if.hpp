@@ -27,6 +27,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \ingroup group-concepts
         template<typename I, typename C, typename P = ident,
             typename V = iterator_value_t<I>,
             typename X = concepts::Invokable::result_t<P, V>>
@@ -36,6 +37,8 @@ namespace ranges
             InvokablePredicate<C, X>,
             Permutable<I>>;
 
+        /// \addtogroup group-algorithms
+        /// @{
         struct remove_if_fn
         {
             template<typename I, typename S, typename C, typename P = ident,
@@ -68,8 +71,11 @@ namespace ranges
             }
         };
 
+        /// \sa `remove_if_fn`
+        /// \ingroup group-algorithms
         constexpr remove_if_fn remove_if{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

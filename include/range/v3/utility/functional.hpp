@@ -25,6 +25,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-utility
+        /// @{
         struct equal_to
         {
             template<typename T, typename U,
@@ -94,14 +96,16 @@ namespace ranges
             }
         };
 
-        constexpr struct save_fn
+        struct save_fn
         {
             template<typename T>
             T operator()(T && t) const
             {
                 return (T &&) t;
             }
-        } save{};
+        };
+        
+        constexpr save_fn save{};
 
         template<typename T>
         struct coerce
@@ -110,17 +114,16 @@ namespace ranges
             {
                 return t;
             }
-
+            /// \overload
             T const & operator()(T const & t) const
             {
                 return t;
             }
-
+            /// \overload
             T operator()(T && t) const
             {
                 return (T &&) t;
             }
-
             T operator()(T const &&) const = delete;
         };
 
@@ -153,20 +156,34 @@ namespace ranges
 
             template<typename T,
                 CONCEPT_REQUIRES_(Predicate<Pred, T>())>
+            bool operator()(T && t)
+            {
+                return !pred_((T &&) t);
+            }
+            /// \overload
+            template<typename T,
+                CONCEPT_REQUIRES_(Predicate<Pred const, T>())>
             constexpr bool operator()(T && t) const
             {
                 return !pred_((T &&) t);
             }
-
+            /// \overload
             template<typename T, typename U,
                 CONCEPT_REQUIRES_(Predicate<Pred, T, U>())>
+            bool operator()(T && t, U && u)
+            {
+                return !pred_((T &&) t, (U &&) u);
+            }
+            /// \overload
+            template<typename T, typename U,
+                CONCEPT_REQUIRES_(Predicate<Pred const, T, U>())>
             constexpr bool operator()(T && t, U && u) const
             {
                 return !pred_((T &&) t, (U &&) u);
             }
         };
 
-        struct not_fn_fn
+        struct not_fn
         {
             template<typename Pred>
             constexpr logical_negate<Pred> operator()(Pred pred) const
@@ -175,7 +192,9 @@ namespace ranges
             }
         };
 
-        constexpr not_fn_fn not_fn {};
+        /// \ingroup group-utility
+        /// \sa `not_fn`
+        constexpr not_fn not_ {};
 
         template<typename T>
         struct reference_wrapper
@@ -269,13 +288,13 @@ namespace ranges
             {
                 return {t};
             }
-
+            /// \overload
             template<typename T>
             reference_wrapper<T> operator()(reference_wrapper<T> t) const
             {
                 return t;
             }
-
+            /// \overload
             template<typename T>
             reference_wrapper<T> operator()(std::reference_wrapper<T> t) const
             {
@@ -283,6 +302,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `ref_fn`
         constexpr ref_fn ref {};
 
         template<typename T>
@@ -295,13 +316,13 @@ namespace ranges
             {
                 return t;
             }
-
+            /// \overload
             template<typename T>
             T & operator()(reference_wrapper<T> t) const noexcept
             {
                 return t.get();
             }
-
+            /// \overload
             template<typename T>
             T & operator()(std::reference_wrapper<T> t) const noexcept
             {
@@ -309,8 +330,11 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `unwrap_reference_fn`
         constexpr unwrap_reference_fn unwrap_reference {};
 
+        /// \cond
         namespace detail
         {
             template<typename Bind>
@@ -329,6 +353,7 @@ namespace ranges
                 (
                     bind_(std::forward<Ts>(ts)...)
                 )
+                /// \overload
                 template<typename...Ts>
                 auto operator()(Ts &&...ts) const
                 RANGES_DECLTYPE_AUTO_RETURN
@@ -337,6 +362,7 @@ namespace ranges
                 )
             };
         }
+        /// \endcond
 
         struct protect_fn
         {
@@ -345,7 +371,7 @@ namespace ranges
             {
                 return {std::forward<F>(f)};
             }
-
+            /// \overload
             template<typename F, CONCEPT_REQUIRES_(!std::is_bind_expression<uncvref_t<F>>())>
             F operator()(F && f) const
             {
@@ -353,8 +379,10 @@ namespace ranges
             }
         };
 
-        // Protect a callable so that it can be safely used in a bind expression without
-        // accidentally becoming a "nested" bind.
+        /// Protect a callable so that it can be safely used in a bind expression without
+        /// accidentally becoming a "nested" bind.
+        /// \ingroup group-utility
+        /// \sa `protect_fn`
         constexpr protect_fn protect{};
 
         // Accepts initializer_lists as either the first or second parameter, or both,
@@ -377,14 +405,14 @@ namespace ranges
             {
                 return base()(std::move(rng0), std::forward<Args>(args)...);
             }
-
+            /// \overload
             template<typename Rng0, typename V1, typename...Args>
             auto operator()(Rng0 && rng0, std::initializer_list<V1> &&rng1, Args &&...args) const ->
                 decltype(std::declval<ImplFn const &>()(std::declval<Rng0>(), std::move(rng1), std::declval<Args>()...))
             {
                 return base()(std::forward<Rng0>(rng0), std::move(rng1), std::forward<Args>(args)...);
             }
-
+            /// \overload
             template<typename V0, typename V1, typename...Args>
             auto operator()(std::initializer_list<V0> rng0, std::initializer_list<V1> &&rng1, Args &&...args) const ->
                 decltype(std::declval<ImplFn const &>()(std::move(rng0), std::move(rng1), std::declval<Args>()...))
@@ -392,6 +420,7 @@ namespace ranges
                 return base()(std::move(rng0), std::move(rng1), std::forward<Args>(args)...);
             }
         };
+        /// @{
     }
 }
 

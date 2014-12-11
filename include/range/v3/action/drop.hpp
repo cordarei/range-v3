@@ -26,6 +26,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-actions
+        /// @{
         namespace action
         {
             struct drop_fn
@@ -50,8 +52,12 @@ namespace ranges
                 }
             };
 
+            /// \ingroup group-actions
+            /// \sa drop_fn
+            /// \sa action
             constexpr action<drop_fn> drop{};
         }
+        /// @}
     }
 }
 

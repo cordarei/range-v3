@@ -24,16 +24,21 @@ namespace ranges
     {
         ////////////////////////////////////////////////////////////////////////////////////////
         // integer_sequence
+
+        /// \brief A container for a sequence of compile-time integer constants.
+        /// \ingroup group-meta
         template<typename T, T...Is>
         struct integer_sequence
         {
             using value_type = T;
+            /// \return `sizeof...(Is)`
             static constexpr std::size_t size() noexcept
             {
                 return sizeof...(Is);
             }
         };
 
+        /// \cond
         namespace detail
         {
             // Glue two sets of integer_sequence together
@@ -68,15 +73,24 @@ namespace ranges
                 using type = integer_sequence<T, 0>;
             };
         }
+        /// \endcond
 
-        // generate integer_sequence [0,N) in O(log(N)) time
+        /// \brief Generate \c integer_sequence containing integer constants
+        /// [0,1,2,...,N-1]. Complexity: O(log(N)).
+        /// \ingroup group-meta
         template<typename T, T N>
         using make_integer_sequence =
             meta::eval<detail::make_integer_sequence_<T, (std::size_t)N>>;
 
+        /// \brief A container for a sequence of compile-time integer constants
+        /// of type \c std::size_t
+        /// \ingroup group-meta
         template<std::size_t...Is>
         using index_sequence = integer_sequence<std::size_t, Is...>;
 
+        /// \brief Generate \c index_sequence containing integer constants
+        /// [0,1,2,...,N-1]. Complexity: O(log(N)).
+        /// \ingroup group-meta
         template<std::size_t N>
         using make_index_sequence = make_integer_sequence<std::size_t, N>;
     }

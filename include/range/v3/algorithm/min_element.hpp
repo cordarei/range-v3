@@ -26,6 +26,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct min_element_fn
         {
             template<typename I, typename S, typename C = ordered_less, typename P = ident,
@@ -56,8 +58,11 @@ namespace ranges
             }
         };
 
+        /// \sa `min_element_fn`
+        /// \ingroup group-algorithms
         constexpr min_element_fn min_element{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

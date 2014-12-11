@@ -17,11 +17,13 @@
 #include <type_traits>
 #include <range/v3/range_fwd.hpp>
 #include <range/v3/utility/meta.hpp>
+#include <range/v3/utility/concepts.hpp>
 
 namespace ranges
 {
     inline namespace v3
     {
+        /// \cond
         namespace detail
         {
             template<typename T, typename Enable = void>
@@ -94,6 +96,7 @@ namespace ranges
             template<typename T>
             using pair_element_t = meta::eval<pair_element<T>>;
         }
+        /// \endcond
 
         template<typename First, typename Second>
         struct compressed_pair
@@ -139,47 +142,61 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `make_compressed_pair_fn`
         constexpr make_compressed_pair_fn make_compressed_pair {};
 
-        // Tuple-like access
-        template<std::size_t I, typename First, typename Second>
+        /// \brief Tuple-like access of `compressed_pair`
+        // TODO Switch to variable template when available
+        template<std::size_t I, typename First, typename Second,
+            CONCEPT_REQUIRES_(I == 0)>
         constexpr auto get(compressed_pair<First, Second> & p) ->
-            typename std::enable_if<I == 0, decltype((p.first))>::type
+            decltype((p.first))
         {
             return p.first;
         }
 
-        template<std::size_t I, typename First, typename Second>
+        /// \overload
+        template<std::size_t I, typename First, typename Second,
+            CONCEPT_REQUIRES_(I == 0)>
         constexpr auto get(compressed_pair<First, Second> const & p) ->
-            typename std::enable_if<I == 0, decltype((p.first))>::type
+            decltype((p.first))
         {
             return p.first;
         }
 
-        template<std::size_t I, typename First, typename Second>
+        /// \overload
+        template<std::size_t I, typename First, typename Second,
+            CONCEPT_REQUIRES_(I == 0)>
         constexpr auto get(compressed_pair<First, Second> && p) ->
-            typename std::enable_if<I == 0, decltype((detail::move(p).first))>::type
+            decltype((detail::move(p).first))
         {
             return detail::move(p).first;
         }
 
-        template<std::size_t I, typename First, typename Second>
+        /// \overload
+        template<std::size_t I, typename First, typename Second,
+            CONCEPT_REQUIRES_(I == 1)>
         constexpr auto get(compressed_pair<First, Second> & p) ->
-            typename std::enable_if<I == 1, decltype((p.second))>::type
+            decltype((p.second))
         {
             return p.second;
         }
 
-        template<std::size_t I, typename First, typename Second>
+        /// \overload
+        template<std::size_t I, typename First, typename Second,
+            CONCEPT_REQUIRES_(I == 1)>
         constexpr auto get(compressed_pair<First, Second> const & p) ->
-            typename std::enable_if<I == 1, decltype((p.second))>::type
+            decltype((p.second))
         {
             return p.second;
         }
 
-        template<std::size_t I, typename First, typename Second>
+        /// \overload
+        template<std::size_t I, typename First, typename Second,
+            CONCEPT_REQUIRES_(I == 1)>
         constexpr auto get(compressed_pair<First, Second> && p) ->
-            typename std::enable_if<I == 1, decltype((detail::move(p).second))>::type
+            decltype((detail::move(p).second))
         {
             return detail::move(p).second;
         }

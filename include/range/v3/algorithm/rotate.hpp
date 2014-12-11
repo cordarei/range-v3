@@ -38,6 +38,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct rotate_fn
         {
         private:
@@ -209,8 +211,11 @@ namespace ranges
             }
         };
 
+        /// \sa `rotate_fn`
+        /// \ingroup group-algorithms
         constexpr rotate_fn rotate {};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

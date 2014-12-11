@@ -37,6 +37,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \ingroup group-concepts
         template<typename I1, typename I2, typename C = equal_to, typename P1 = ident,
             typename P2 = ident>
         using IsPermutationable = meta::fast_and<
@@ -44,6 +45,8 @@ namespace ranges
             ForwardIterator<I2>,
             Comparable<I1, I2, C, P1, P2>>;
 
+        /// \addtogroup group-algorithms
+        /// @{
         struct is_permutation_fn
         {
         private:
@@ -190,6 +193,8 @@ namespace ranges
             }
         };
 
+        /// \sa `is_permutation_fn`
+        /// \ingroup group-algorithms
         constexpr with_braced_init_args<is_permutation_fn> is_permutation {};
 
         struct next_permutation_fn
@@ -234,6 +239,8 @@ namespace ranges
             }
         };
 
+        /// \sa `next_permutation_fn`
+        /// \ingroup group-algorithms
         constexpr next_permutation_fn next_permutation{};
 
         struct prev_permutation_fn
@@ -278,8 +285,11 @@ namespace ranges
             }
         };
 
+        /// \sa `prev_permutation_fn`
+        /// \ingroup group-algorithms
         constexpr prev_permutation_fn prev_permutation{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

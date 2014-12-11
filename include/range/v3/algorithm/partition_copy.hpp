@@ -28,6 +28,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \ingroup group-concepts
         template<typename I, typename O0, typename O1, typename C, typename P = ident,
             typename V = iterator_value_t<I>,
             typename X = concepts::Invokable::result_t<P, V>>
@@ -40,6 +41,8 @@ namespace ranges
             Invokable<P, V>,
             InvokablePredicate<C, X>>;
 
+        /// \addtogroup group-algorithms
+        /// @{
         struct partition_copy_fn
         {
             template<typename I, typename S, typename O0, typename O1, typename C, typename P = ident,
@@ -74,8 +77,11 @@ namespace ranges
             }
         };
 
+        /// \sa `partition_copy_fn`
+        /// \ingroup group-algorithms
         constexpr partition_copy_fn partition_copy{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

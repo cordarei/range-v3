@@ -22,8 +22,10 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \ingroup group-core
         struct back_fn
         {
+            /// \return `*prev(end(rng))`
             template<typename Rng,
                 CONCEPT_REQUIRES_(BoundedIterable<Rng>() && BidirectionalIterable<Rng>())>
             range_reference_t<Rng> operator()(Rng &&rng) const
@@ -32,6 +34,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-core
+        /// \sa `back_fn`
         constexpr back_fn back {};
     }
 }

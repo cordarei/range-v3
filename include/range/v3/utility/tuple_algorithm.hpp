@@ -23,6 +23,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-utility
+        /// @{
         template<typename Tup>
         using tuple_indices_t =
             make_index_sequence<
@@ -88,6 +90,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `tuple_transform_fn`
         constexpr tuple_transform_fn tuple_transform {};
 
         struct tuple_foldl_fn
@@ -142,6 +146,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `tuple_foldl_fn`
         constexpr tuple_foldl_fn tuple_foldl {};
 
         // NOTE: This does *not* guarantee order of evaluation, nor does
@@ -169,6 +175,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `tuple_for_each_fn`
         constexpr tuple_for_each_fn tuple_for_each {};
 
         struct tuple_apply_fn
@@ -193,6 +201,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `tuple_apply_fn`
         constexpr tuple_apply_fn tuple_apply {};
 
         struct make_tuple_fn
@@ -204,7 +214,10 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `make_tuple_fn`
         constexpr make_tuple_fn make_tuple {};
+        /// @}
     }
 }
 

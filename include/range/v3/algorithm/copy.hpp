@@ -28,6 +28,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct copy_fn : aux::copy_fn
         {
             using aux::copy_fn::operator();
@@ -61,8 +63,11 @@ namespace ranges
             }
         };
 
+        /// \sa `copy_fn`
+        /// \ingroup group-algorithms
         constexpr copy_fn copy{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

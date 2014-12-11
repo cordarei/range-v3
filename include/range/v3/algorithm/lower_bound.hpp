@@ -25,6 +25,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct lower_bound_fn
         {
             template<typename I, typename S, typename V, typename C = ordered_less, typename P = ident,
@@ -46,8 +48,11 @@ namespace ranges
             }
         };
 
+        /// \sa `lower_bound_fn`
+        /// \ingroup group-algorithms
         constexpr lower_bound_fn lower_bound{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

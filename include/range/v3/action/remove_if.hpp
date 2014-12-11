@@ -10,8 +10,8 @@
 // Project home: https://github.com/ericniebler/range-v3
 //
 
-#ifndef RANGES_V3_ACTION_ERASE_IF_HPP
-#define RANGES_V3_ACTION_ERASE_IF_HPP
+#ifndef RANGES_V3_ACTION_REMOVE_IF_HPP
+#define RANGES_V3_ACTION_REMOVE_IF_HPP
 
 #include <utility>
 #include <range/v3/range_fwd.hpp>
@@ -23,19 +23,23 @@
 
 namespace ranges
 {
-    inline namespace v3
+    inline namespace v3 
     {
+        // TODO Look at all the special cases handled by erase_if in Library Fundamentals 2
+
+        /// \addtogroup group-actions
+        /// @{
         namespace action
         {
-            struct erase_if_fn
+            struct remove_if_fn
             {
             private:
                 friend action_access;
                 template<typename C, typename P = ident, CONCEPT_REQUIRES_(!Iterable<C>())>
-                static auto bind(erase_if_fn erase_if, C pred, P proj = P{})
+                static auto bind(remove_if_fn remove_if, C pred, P proj = P{})
                 RANGES_DECLTYPE_AUTO_RETURN
                 (
-                    std::bind(erase_if, std::placeholders::_1, protect(std::move(pred)),
+                    std::bind(remove_if, std::placeholders::_1, protect(std::move(pred)),
                         protect(std::move(proj)))
                 )
             public:
@@ -50,8 +54,12 @@ namespace ranges
                 }
             };
 
-            constexpr action<erase_if_fn> erase_if{};
+            /// \ingroup group-actions
+            /// \sa action
+            /// \sa with_braced_init_args
+            constexpr action<remove_if_fn> remove_if{};
         }
+        /// @}
     }
 }
 

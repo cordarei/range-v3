@@ -20,15 +20,17 @@
 #include <range/v3/begin_end.hpp>
 #include <range/v3/range_traits.hpp>
 #include <range/v3/range_adaptor.hpp>
-#include <range/v3/utility/pipeable.hpp>
+#include <range/v3/view/view.hpp>
 
 namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-views
+        /// @{
         template<typename Rng>
-        struct reversed_view
-          : range_adaptor<reversed_view<Rng>, Rng>
+        struct reverse_view
+          : range_adaptor<reverse_view<Rng>, Rng>
         {
         private:
             CONCEPT_ASSERT(BidirectionalIterable<Rng>());
@@ -40,13 +42,13 @@ namespace ranges
             struct adaptor : adaptor_base
             {
             private:
-                reversed_view const *rng_;
+                reverse_view const *rng_;
             public:
                 adaptor() = default;
-                adaptor(reversed_view const &rng)
+                adaptor(reverse_view const &rng)
                   : rng_(&rng)
                 {}
-                range_iterator_t<Rng> begin(reversed_view const &rng) const
+                range_iterator_t<Rng> begin(reverse_view const &rng) const
                 {
                     auto it = ranges::end(rng.mutable_base());
                     ranges::advance_bounded(it, -1, ranges::begin(rng.mutable_base()));
@@ -93,9 +95,9 @@ namespace ranges
                 return {*this};
             }
         public:
-            reversed_view() = default;
-            reversed_view(Rng && rng)
-              : range_adaptor_t<reversed_view>{std::forward<Rng>(rng)}
+            reverse_view() = default;
+            reverse_view(Rng && rng)
+              : range_adaptor_t<reverse_view>{std::forward<Rng>(rng)}
             {}
             CONCEPT_REQUIRES(SizedIterable<Rng>())
             range_size_t<Rng> size() const
@@ -106,19 +108,38 @@ namespace ranges
 
         namespace view
         {
-            struct reverse_fn : pipeable<reverse_fn>
+            struct reverse_fn
             {
                 template<typename Rng>
-                reversed_view<Rng> operator()(Rng && rng) const
+                using Concept = meta::and_<
+                    BidirectionalIterable<Rng>,
+                    BoundedIterable<Rng>>;
+
+                template<typename Rng, CONCEPT_REQUIRES_(Concept<Rng>())>
+                reverse_view<Rng> operator()(Rng && rng) const
                 {
-                    CONCEPT_ASSERT(BidirectionalIterable<Rng>());
-                    CONCEPT_ASSERT(BoundedIterable<Rng>());
-                    return reversed_view<Rng>{std::forward<Rng>(rng)};
+                    return reverse_view<Rng>{std::forward<Rng>(rng)};
                 }
+            #ifndef RANGES_DOXYGEN_INVOKED
+                // For error reporting
+                template<typename Rng, CONCEPT_REQUIRES_(!Concept<Rng>())>
+                void operator()(Rng &&) const
+                {
+                    CONCEPT_ASSERT_MSG(BidirectionalIterable<Rng>(),
+                        "The object on which view::reverse operates must be a model of the "
+                        "BidirectionalIterable concept.");
+                    CONCEPT_ASSERT_MSG(BoundedIterable<Rng>(),
+                        "To reverse an iterable object, its end iterator must be a model of "
+                        "the BidirectionalIterator concept.");
+                }
+            #endif
             };
 
-            constexpr reverse_fn reverse {};
+            /// \sa `reverse_fn`
+            /// \ingroup group-views
+            constexpr view<reverse_fn> reverse{};
         }
+        /// @}
     }
 }
 

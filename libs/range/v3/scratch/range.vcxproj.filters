@@ -95,6 +95,12 @@
     <None Include="..\..\..\..\doc\show.cmd">
       <Filter>Doc Files</Filter>
     </None>
+    <None Include="..\..\..\..\doc\Doxyfile.in">
+      <Filter>Doc Files</Filter>
+    </None>
+    <None Include="..\..\..\..\doc\index.md">
+      <Filter>Doc Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="range.cpp">
@@ -292,9 +298,6 @@
     <ClCompile Include="..\..\..\..\test\algorithm\shuffle.cpp">
       <Filter>Test Files\algorithm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\test\view\join.cpp">
-      <Filter>Test Files\view</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\test\view\stride.cpp">
       <Filter>Test Files\view</Filter>
     </ClCompile>
@@ -406,9 +409,6 @@
     <ClCompile Include="..\..\..\..\test\view\const.cpp">
       <Filter>Test Files\view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\test\view\filter.cpp">
-      <Filter>Test Files\view</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\test\view\transform.cpp">
       <Filter>Test Files\view</Filter>
     </ClCompile>
@@ -460,9 +460,6 @@
     <ClCompile Include="..\..\..\..\test\multiple2.cpp">
       <Filter>Test Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\test\view\to_container.cpp">
-      <Filter>Test Files\view</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\test\action\cont_concepts.cpp">
       <Filter>Test Files\action</Filter>
     </ClCompile>
@@ -470,9 +467,6 @@
       <Filter>Test Files\action</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\test\action\drop_while.cpp">
-      <Filter>Test Files\action</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\test\action\erase_if.cpp">
       <Filter>Test Files\action</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\test\action\insert.cpp">
@@ -504,6 +498,33 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\test\action\unique.cpp">
       <Filter>Test Files\action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\test\to_container.cpp">
+      <Filter>Test Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\test\view\remove_if.cpp">
+      <Filter>Test Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\test\action\remove_if.cpp">
+      <Filter>Test Files\action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\test\view\partial_sum.cpp">
+      <Filter>Test Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\test\view\group_by.cpp">
+      <Filter>Test Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\test\view\split.cpp">
+      <Filter>Test Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\test\view\any_range.cpp">
+      <Filter>Test Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\test\view\intersperse.cpp">
+      <Filter>Test Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\test\view\join.cpp">
+      <Filter>Test Files\view</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -702,9 +723,6 @@
     <ClInclude Include="..\..\..\..\include\range\v3\view\reverse.hpp">
       <Filter>Header Files\view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\range\v3\view\join.hpp">
-      <Filter>Header Files\view</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\include\range\v3\utility\invokable.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
@@ -863,9 +881,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\include\range\v3\utility\optional.hpp">
       <Filter>Header Files\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\range\v3\view\flatten.hpp">
-      <Filter>Header Files\view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\include\range\v3\view\generate.hpp">
       <Filter>Header Files\view</Filter>
@@ -1032,9 +1047,6 @@
     <ClInclude Include="..\..\..\..\include\range\v3\utility\pipeable.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\range\v3\view\to_container.hpp">
-      <Filter>Header Files\view</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\include\range\v3\action\action.hpp">
       <Filter>Header Files\action</Filter>
     </ClInclude>
@@ -1048,9 +1060,6 @@
       <Filter>Header Files\action</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\include\range\v3\action\erase.hpp">
-      <Filter>Header Files\action</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\range\v3\action\erase_if.hpp">
       <Filter>Header Files\action</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\include\range\v3\action\insert.hpp">
@@ -1095,6 +1104,39 @@
     <ClInclude Include="..\..\..\..\include\range\v3\utility\nullptr_v.hpp">
       <Filter>Header Files\utility</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\include\range\v3\to_container.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\range\v3\view\remove_if.hpp">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\range\v3\action\remove_if.hpp">
+      <Filter>Header Files\action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\range\v3\view\partial_sum.hpp">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\range\v3\view\concat.hpp">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\range\v3\view\join.hpp">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\range\v3\view\view.hpp">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\range\v3\view\group_by.hpp">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\range\v3\view\empty.hpp">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\range\v3\view\split.hpp">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\range\v3\view\intersperse.hpp">
+      <Filter>Header Files\view</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\CMakeLists.txt" />
@@ -1125,5 +1167,13 @@
     <Text Include="..\..\..\..\test\action\CMakeLists.txt">
       <Filter>Test Files\action</Filter>
     </Text>
+    <Text Include="..\..\..\..\doc\CMakeLists.txt">
+      <Filter>Doc Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\..\..\doc\layout.xml">
+      <Filter>Doc Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

@@ -24,6 +24,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \cond
         namespace detail
         {
             template<typename Bind>
@@ -36,6 +37,10 @@ namespace ranges
                 {}
             };
         }
+        /// \endcond
+
+        /// \addtogroup group-utility
+        /// @{
 
         struct make_pipeable_fn
         {
@@ -46,6 +51,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `make_pipeable_fn`
         constexpr make_pipeable_fn make_pipeable{};
 
         template<typename T,
@@ -138,6 +145,8 @@ namespace ranges
                 bind_forward<Pipe1>(pipe1)
             ))
         )
+
+        /// @}
     }
 }
 

@@ -23,6 +23,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct swap_ranges_fn
         {
             template<typename I1Ref, typename S1, typename I2,
@@ -70,8 +72,11 @@ namespace ranges
             }
         };
 
+        /// \sa `swap_ranges_fn`
+        /// \ingroup group-algorithms
         constexpr swap_ranges_fn swap_ranges{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

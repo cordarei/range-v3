@@ -41,6 +41,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \ingroup group-concepts
         template<typename I, typename C, typename P = ident,
             typename V = iterator_value_t<I>,
             typename X = concepts::Invokable::result_t<P, V>>
@@ -50,6 +51,8 @@ namespace ranges
             Invokable<P, V>,
             InvokablePredicate<C, X>>;
 
+        /// \addtogroup group-algorithms
+        /// @{
         struct stable_partition_fn
         {
         private:
@@ -282,8 +285,11 @@ namespace ranges
             }
         };
 
+        /// \sa `stable_partition_fn`
+        /// \ingroup group-algorithms
         constexpr stable_partition_fn stable_partition{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

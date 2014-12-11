@@ -20,6 +20,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-views
+        /// @{
         template<typename I>
         struct unbounded_view
           : range_interface<unbounded_view<I>, true>
@@ -52,8 +54,11 @@ namespace ranges
                 }
             };
 
-            constexpr unbounded_fn unbounded {};
+            /// \sa `unbounded_fn`
+            /// \ingroup group-views
+            constexpr unbounded_fn unbounded{};
         }
+        /// @}
     }
 }
 

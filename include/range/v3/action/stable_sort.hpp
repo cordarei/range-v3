@@ -25,6 +25,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-actions
+        /// @{
         namespace action
         {
             struct stable_sort_fn
@@ -48,8 +50,12 @@ namespace ranges
                 }
             };
 
+            /// \ingroup group-actions
+            /// \sa stable_sort_fn
+            /// \sa action
             constexpr action<stable_sort_fn> stable_sort{};
         }
+        /// @}
     }
 }
 

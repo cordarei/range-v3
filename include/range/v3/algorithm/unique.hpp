@@ -26,16 +26,18 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct unique_fn
         {
             /// \brief template function \c unique_fn::operator()
             ///
             /// range-based version of the \c unique std algorithm
             ///
-            /// \pre \c Rng is a model of the ForwardRange concept
-            /// \pre \c I is a model of the ForwardIterator concept
-            /// \pre \c S is a model of the Sentinel concept
-            /// \pre \c C is a model of the InvokableRelation concept
+            /// \pre `Rng` is a model of the `ForwardRange` concept
+            /// \pre `I` is a model of the `ForwardIterator` concept
+            /// \pre `S` is a model of the `Sentinel` concept
+            /// \pre `C` is a model of the `InvokableRelation` concept
             ///
             template<typename I, typename S, typename C = equal_to, typename P = ident,
                 CONCEPT_REQUIRES_(Sortable<I, C, P>() && IteratorRange<I, S>())>
@@ -65,8 +67,11 @@ namespace ranges
             }
         };
 
+        /// \sa `unique_fn`
+        /// \ingroup group-algorithms
         constexpr unique_fn unique{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

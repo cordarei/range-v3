@@ -28,14 +28,16 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct binary_search_fn
         {
             /// \brief function template \c binary_search_fn::operator()
             ///
             /// range-based version of the \c binary_search std algorithm
             ///
-            /// \pre \c Rng is a model of the Rng concept
-            /// \pre \c C is a model of the InvokableRelation concept
+            /// \pre `Rng` is a model of the `Rng` concept
+            /// \pre `C` is a model of the `InvokableRelation` concept
             template<typename I, typename S, typename V2, typename C = ordered_less, typename P = ident,
                 CONCEPT_REQUIRES_(
                     IteratorRange<I, S>() &&
@@ -66,8 +68,11 @@ namespace ranges
             }
         };
 
+        /// \sa `binary_search_fn`
+        /// \ingroup group-algorithms
         constexpr with_braced_init_args<binary_search_fn> binary_search{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

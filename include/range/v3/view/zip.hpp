@@ -34,6 +34,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \cond
         namespace detail
         {
             constexpr struct
@@ -112,6 +113,18 @@ namespace ranges
             } max_ {};
 
             template<typename TupleLike>
+            struct tuple_to_pair_type
+            {
+                using type = TupleLike;
+            };
+
+            template<typename First, typename Second>
+            struct tuple_to_pair_type<std::tuple<First, Second>>
+            {
+                using type = std::pair<First, Second>;
+            };
+
+            template<typename TupleLike>
             TupleLike tuple_to_pair(TupleLike tup)
             {
                 return tup;
@@ -123,11 +136,14 @@ namespace ranges
                 return {std::get<0>(std::move(tup)), std::get<1>(std::move(tup))};
             }
         } // namespace detail
+        /// \endcond
 
+        /// \addtogroup group-views
+        /// @{
         template<typename Fun, typename ...Rngs>
-        struct zipped_with_view
+        struct zip_with_view
           : range_facade<
-                zipped_with_view<Fun, Rngs...>,
+                zip_with_view<Fun, Rngs...>,
                 meta::and_c<is_infinite<Rngs>::value...>::value>
         {
         private:
@@ -150,7 +166,9 @@ namespace ranges
                     meta::or_c<(bool) Derived<ranges::input_iterator_tag,
                         range_category_t<Rngs>>()...>;
                 using value_type =
-                    uncvref_t<result_of_t<invokable_t<Fun>(range_value_t<Rngs>...)>>;
+                    meta::eval<
+                        detail::tuple_to_pair_type<
+                            uncvref_t<result_of_t<invokable_t<Fun>(range_value_t<Rngs>...)>>>>;
                 cursor() = default;
                 cursor(invokable_t<Fun> const &fun, std::tuple<range_iterator_t<view::all_t<Rngs>>...> its)
                   : fun_(&fun), its_(std::move(its))
@@ -245,8 +263,8 @@ namespace ranges
                 return {*fun_, tuple_transform(rngs_, end)};
             }
         public:
-            zipped_with_view() = default;
-            explicit zipped_with_view(Fun fun, Rngs &&...rngs)
+            zip_with_view() = default;
+            explicit zip_with_view(Fun fun, Rngs &&...rngs)
               : fun_{invokable(std::move(fun))}
               , rngs_{view::all(std::forward<Rngs>(rngs))...}
             {}
@@ -261,12 +279,12 @@ namespace ranges
         };
 
         template<typename ...Rngs>
-        struct zipped_view
-          : zipped_with_view<make_tuple_fn, Rngs...>
+        struct zip_view
+          : zip_with_view<make_tuple_fn, Rngs...>
         {
-            zipped_view() = default;
-            zipped_view(Rngs &&...rngs)
-              : zipped_with_view<make_tuple_fn, Rngs...>{make_tuple, std::forward<Rngs>(rngs)...}
+            zip_view() = default;
+            zip_view(Rngs &&...rngs)
+              : zip_with_view<make_tuple_fn, Rngs...>{make_tuple, std::forward<Rngs>(rngs)...}
             {}
         };
 
@@ -274,29 +292,61 @@ namespace ranges
         {
             struct zip_fn
             {
-                template<typename...Rngs>
-                zipped_view<Rngs...> operator()(Rngs &&... rngs) const
+                template<typename ...Rngs>
+                using Concept = meta::and_<InputIterable<Rngs>...>;
+
+                template<typename...Rngs, CONCEPT_REQUIRES_(Concept<Rngs...>())>
+                zip_view<Rngs...> operator()(Rngs &&... rngs) const
                 {
                     CONCEPT_ASSERT(meta::and_c<(bool) Iterable<Rngs>()...>::value);
-                    return zipped_view<Rngs...>{std::forward<Rngs>(rngs)...};
+                    return zip_view<Rngs...>{std::forward<Rngs>(rngs)...};
                 }
+            #ifndef RANGES_DOXYGEN_INVOKED
+                template<typename...Rngs, CONCEPT_REQUIRES_(!Concept<Rngs...>())>
+                void operator()(Rngs &&... rngs) const
+                {
+                    CONCEPT_ASSERT_MSG(meta::and_<InputIterable<Rngs>...>(),
+                        "All of the objects passed to view::zip must model the InputIterable "
+                        "concept");
+                }
+            #endif
             };
 
-            constexpr zip_fn zip {};
+            /// \sa `zip_fn`
+            /// \ingroup group-views
+            constexpr zip_fn zip{};
 
             struct zip_with_fn
             {
-                template<typename Fun, typename...Rngs>
-                zipped_with_view<Fun, Rngs...> operator()(Fun fun, Rngs &&... rngs) const
+                template<typename Fun, typename ...Rngs>
+                using Concept = meta::and_<
+                    InputIterable<Rngs>...,
+                    Invokable<Fun, range_value_t<Rngs>...>>;
+
+                template<typename Fun, typename...Rngs, CONCEPT_REQUIRES_(Concept<Fun, Rngs...>())>
+                zip_with_view<Fun, Rngs...> operator()(Fun fun, Rngs &&... rngs) const
                 {
-                    CONCEPT_ASSERT(meta::and_c<(bool) Iterable<Rngs>()...>::value);
-                    CONCEPT_ASSERT(Invokable<Fun, range_value_t<Rngs>...>());
-                    return zipped_with_view<Fun, Rngs...>{std::move(fun), std::forward<Rngs>(rngs)...};
+                    return zip_with_view<Fun, Rngs...>{std::move(fun), std::forward<Rngs>(rngs)...};
                 }
+            #ifndef RANGES_DOXYGEN_INVOKED
+                template<typename Fun, typename...Rngs, CONCEPT_REQUIRES_(!Concept<Fun, Rngs...>())>
+                void operator()(Fun, Rngs &&...) const
+                {
+                    CONCEPT_ASSERT_MSG(meta::and_<InputIterable<Rngs>...>(),
+                        "All of the objects passed to view::zip_with must model the InputIterable "
+                        "concept");
+                    CONCEPT_ASSERT_MSG(Invokable<Fun, range_value_t<Rngs>...>(),
+                        "The function passed to view::zip_with must be callable with N arguments "
+                        "taken one from each of the N ranges.");
+                }
+            #endif
             };
 
-            constexpr zip_with_fn zip_with {};
+            /// \sa `zip_with_fn`
+            /// \ingroup group-views
+            constexpr zip_with_fn zip_with{};
         }
+        /// @}
     }
 }
 

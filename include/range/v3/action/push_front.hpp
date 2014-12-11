@@ -23,6 +23,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \cond
         namespace adl_push_front_detail
         {
             template<typename Cont, typename T,
@@ -68,9 +69,12 @@ namespace ranges
                 }
             };
         }
+        /// \endcond
 
         namespace action
         {
+            /// \ingroup group-actions
+            /// \sa with_braced_init_args
             constexpr with_braced_init_args<action<adl_push_front_detail::push_front_fn>> push_front{};
         }
 

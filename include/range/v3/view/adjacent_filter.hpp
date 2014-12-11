@@ -21,14 +21,17 @@
 #include <range/v3/utility/iterator.hpp>
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/algorithm/adjacent_find.hpp>
+#include <range/v3/view/view.hpp>
 
 namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-views
+        /// @{
         template<typename Rng, typename F>
-        struct adjacent_filtered_view
-          : range_adaptor<adjacent_filtered_view<Rng, F>, Rng>
+        struct adjacent_filter_view
+          : range_adaptor<adjacent_filter_view<Rng, F>, Rng>
         {
         private:
             friend range_access;
@@ -37,11 +40,11 @@ namespace ranges
             struct adaptor : adaptor_base
             {
             private:
-                adjacent_filtered_view const *rng_;
+                adjacent_filter_view const *rng_;
                 using adaptor_base::prev;
             public:
                 adaptor() = default;
-                adaptor(adjacent_filtered_view const &rng)
+                adaptor(adjacent_filter_view const &rng)
                   : rng_(&rng)
                 {}
                 void next(range_iterator_t<Rng> &it) const
@@ -61,9 +64,9 @@ namespace ranges
                 return {*this};
             }
         public:
-            adjacent_filtered_view() = default;
-            adjacent_filtered_view(Rng && rng, F pred)
-              : range_adaptor_t<adjacent_filtered_view>{std::forward<Rng>(rng)}
+            adjacent_filter_view() = default;
+            adjacent_filter_view(Rng && rng, F pred)
+              : range_adaptor_t<adjacent_filter_view>{std::forward<Rng>(rng)}
               , pred_(invokable(std::move(pred)))
             {}
         };
@@ -72,25 +75,45 @@ namespace ranges
         {
             struct adjacent_filter_fn
             {
+            private:
+                friend view_access;
+                template<typename F>
+                static auto bind(adjacent_filter_fn adjacent_filter, F pred)
+                RANGES_DECLTYPE_AUTO_RETURN
+                (
+                    make_pipeable(std::bind(adjacent_filter, std::placeholders::_1, protect(std::move(pred))))
+                )
+            public:
                 template<typename Rng, typename F>
-                adjacent_filtered_view<Rng, F>
-                operator()(Rng && rng, F pred) const
+                using Concept = meta::and_<
+                    ForwardIterable<Rng>,
+                    InvokablePredicate<F, range_value_t<Rng>, range_value_t<Rng>>>;
+
+                template<typename Rng, typename F,
+                    CONCEPT_REQUIRES_(Concept<Rng, F>())>
+                adjacent_filter_view<Rng, F> operator()(Rng && rng, F pred) const
                 {
-                    CONCEPT_ASSERT(ForwardIterable<Rng>());
-                    CONCEPT_ASSERT(InvokablePredicate<F, range_value_t<Rng>,
-                                                         range_value_t<Rng>>());
                     return {std::forward<Rng>(rng), std::move(pred)};
                 }
-                template<typename F>
-                auto operator()(F pred) const ->
-                    decltype(make_pipeable(std::bind(*this, std::placeholders::_1, protect(std::move(pred)))))
+            #ifndef RANGES_DOXYGEN_INVOKED
+                template<typename Rng, typename F,
+                    CONCEPT_REQUIRES_(!Concept<Rng, F>())>
+                void operator()(Rng &&, F) const
                 {
-                    return make_pipeable(std::bind(*this, std::placeholders::_1, protect(std::move(pred))));
+                    CONCEPT_ASSERT_MSG(ForwardIterable<Rng>(),
+                        "Rng must model the ForwardIterable concept");
+                    CONCEPT_ASSERT_MSG(InvokablePredicate<F, range_value_t<Rng>, range_value_t<Rng>>(),
+                        "Function F must be callable with two arguments of the range's value type, and "
+                        "it must return something convertible to bool.");
                 }
+            #endif
             };
 
-            constexpr adjacent_filter_fn adjacent_filter {};
+            /// \sa `adjacent_filter_fn`
+            /// \ingroup group-views
+            constexpr view<adjacent_filter_fn> adjacent_filter{};
         }
+        /// @}
     }
 }
 

@@ -28,6 +28,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-core
+        /// @{
         struct enumerate_fn : iter_enumerate_fn
         {
         private:
@@ -56,6 +58,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-core
+        /// \sa `enumerate_fn`
         constexpr enumerate_fn enumerate{};
 
         struct distance_fn : iter_distance_fn
@@ -84,6 +88,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-core
+        /// \sa `distance_fn`
         constexpr distance_fn distance {};
 
         // The interface of distance_compare is taken from Util.listLengthCmp in the GHC API.
@@ -106,7 +112,7 @@ namespace ranges
             template<typename Rng>
             int impl_r(Rng &rng, range_difference_t<Rng> n, concepts::SizedIterable*) const
             {
-                range_difference_t<Rng> dist = static_cast<range_difference_t<Rng>>(size(rng));
+                auto dist = distance(rng); // O(1) since rng is a SizedIterable
                 if (dist > n)
                     return  1;
                 else if (dist < n)
@@ -125,7 +131,11 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-core
+        /// \sa `distance_compare_fn`
         constexpr distance_compare_fn distance_compare {};
+
+        /// @}
     }
 }
 

@@ -26,6 +26,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct equal_range_fn
         {
             template<typename I, typename S, typename V, typename C = ordered_less, typename P = ident,
@@ -49,8 +51,11 @@ namespace ranges
             }
         };
 
+        /// \sa `equal_range_fn`
+        /// \ingroup group-algorithms
         constexpr equal_range_fn equal_range{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

@@ -40,6 +40,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct merge_fn
         {
             template<typename I0, typename S0, typename I1, typename S1, typename O,
@@ -91,8 +93,11 @@ namespace ranges
             }
         };
 
+        /// \sa `merge_fn`
+        /// \ingroup group-algorithms
         constexpr merge_fn merge{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

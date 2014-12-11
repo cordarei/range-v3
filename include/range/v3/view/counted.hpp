@@ -16,7 +16,6 @@
 #include <range/v3/range_fwd.hpp>
 #include <range/v3/range_facade.hpp>
 #include <range/v3/range.hpp>
-#include <range/v3/utility/pipeable.hpp>
 #include <range/v3/utility/meta.hpp>
 #include <range/v3/utility/iterator.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
@@ -27,6 +26,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-views
+        /// @{
         template<typename I, typename D /* = iterator_difference_t<I>*/>
         struct counted_view
           : range_facade<counted_view<I, D>>
@@ -60,7 +61,7 @@ namespace ranges
 
         namespace view
         {
-            struct counted_fn : pipeable<counted_fn>
+            struct counted_fn
             {
                 template<typename I, CONCEPT_REQUIRES_(!RandomAccessIterator<I>())>
                 counted_view<I> operator()(I it, iterator_difference_t<I> n) const
@@ -77,8 +78,11 @@ namespace ranges
                 }
             };
 
-            constexpr counted_fn counted {};
+            /// \sa `counted_fn`
+            /// \ingroup group-views
+            constexpr counted_fn counted{};
         }
+        /// @}
     }
 }
 

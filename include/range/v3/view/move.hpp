@@ -22,17 +22,21 @@
 #include <range/v3/range_adaptor.hpp>
 #include <range/v3/range_concepts.hpp>
 #include <range/v3/utility/pipeable.hpp>
-
+#include <range/v3/view/view.hpp>
 namespace ranges
 {
     inline namespace v3
     {
+        /// \cond
         namespace detail
         {
             template<typename T> T && rref(T &, int);
             template<typename T> T rref(T, long);
         }
+        /// \endcond
 
+        /// \addtogroup group-views
+        /// @{
         template<typename Rng>
         struct move_view
           : range_adaptor<move_view<Rng>, Rng>
@@ -73,18 +77,31 @@ namespace ranges
 
         namespace view
         {
-            struct move_fn : pipeable<move_fn>
+            struct move_fn
             {
-                template<typename Rng>
+                template<typename Rng,
+                    CONCEPT_REQUIRES_(InputIterable<Rng>())>
                 move_view<Rng> operator()(Rng && rng) const
                 {
-                    CONCEPT_ASSERT(InputIterable<Rng>());
                     return move_view<Rng>{std::forward<Rng>(rng)};
                 }
+            #ifndef RANGES_DOXYGEN_INVOKED
+                template<typename Rng,
+                    CONCEPT_REQUIRES_(!InputIterable<Rng>())>
+                void operator()(Rng &&) const
+                {
+                    CONCEPT_ASSERT_MSG(InputIterable<Rng>(),
+                        "The argument passed to view::move must be a model of the InputIterable "
+                        "concept.");
+                }
+            #endif
             };
 
-            constexpr move_fn move {};
+            /// \sa `move_fn`
+            /// \ingroup group-views
+            constexpr view<move_fn> move{};
         }
+        /// @}
     }
 }
 

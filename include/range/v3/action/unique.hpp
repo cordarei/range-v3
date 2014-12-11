@@ -24,6 +24,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-actions
+        /// @{
         namespace action
         {
             struct unique_fn
@@ -37,8 +39,12 @@ namespace ranges
                 }
             };
 
+            /// \ingroup group-actions
+            /// \sa unique_fn
+            /// \sa action
             constexpr action<unique_fn> unique{};
         }
+        /// @}
     }
 }
 

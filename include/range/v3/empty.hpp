@@ -21,8 +21,10 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \ingroup group-core
         struct empty_fn
         {
+            /// \return `begin(rng) == end(rng)`
             template<typename Rng,
                 CONCEPT_REQUIRES_(Iterable<Rng>())>
             bool operator()(Rng &&rng) const
@@ -31,6 +33,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-core
+        /// \sa `empty_fn`
         constexpr empty_fn empty {};
     }
 }

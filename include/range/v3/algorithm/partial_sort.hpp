@@ -28,6 +28,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct partial_sort_fn
         {
             template<typename I, typename S, typename C = ordered_less, typename P = ident,
@@ -61,8 +63,11 @@ namespace ranges
             }
         };
 
+        /// \sa `partial_sort_fn`
+        /// \ingroup group-algorithms
         constexpr partial_sort_fn partial_sort {};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

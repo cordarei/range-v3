@@ -35,6 +35,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// ingroup group-concepts
         template<typename I, typename V, typename C = equal_to, typename P = ident,
             typename IV = iterator_value_t<I>,
             typename X1 = concepts::Invokable::result_t<P, IV>>
@@ -43,6 +44,8 @@ namespace ranges
             Invokable<P, IV>,
             InvokableRelation<C, X1, V>>;
 
+        /// \addtogroup group-algorithms
+        /// @{
         struct search_n_fn
         {
         private:
@@ -185,8 +188,11 @@ namespace ranges
             }
         };
 
+        /// \sa `search_n_fn`
+        /// \ingroup group-algorithms
         constexpr search_n_fn search_n{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

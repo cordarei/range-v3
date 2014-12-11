@@ -10,8 +10,8 @@
 // Project home: https://github.com/ericniebler/range-v3
 //
 
-#ifndef RANGES_V3_VIEW_TO_CONTAINER_HPP
-#define RANGES_V3_VIEW_TO_CONTAINER_HPP
+#ifndef RANGES_V3_TO_CONTAINER_HPP
+#define RANGES_V3_TO_CONTAINER_HPP
 
 #include <range/v3/range_fwd.hpp>
 #include <range/v3/range_concepts.hpp>
@@ -33,6 +33,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \cond
         namespace detail
         {
             template<typename Rng, typename Cont, typename I = range_common_iterator_t<Rng>>
@@ -43,19 +44,6 @@ namespace ranges
                 Convertible<range_value_t<Rng>, range_value_t<Cont>>,
                 Constructible<Cont, I, I>>;
 
-            template<typename Container, typename Rng,
-                CONCEPT_REQUIRES_(detail::ConvertibleToContainer<Rng, Container>())>
-            Container to_container(Rng && rng)
-            {
-                static_assert(!is_infinite<Rng>::value,
-                    "Attempt to convert an infinite range to a container.");
-                using I = range_common_iterator_t<Rng>;
-                return Container{I{begin(rng)}, I{end(rng)}};
-            }
-        }
-
-        namespace view
-        {
             template<typename ContainerMetafunctionClass>
             struct to_container_fn
               : pipeable<to_container_fn<ContainerMetafunctionClass>>
@@ -65,24 +53,53 @@ namespace ranges
                     CONCEPT_REQUIRES_(Iterable<Rng>() && detail::ConvertibleToContainer<Rng, Cont>())>
                 Cont operator()(Rng && rng) const
                 {
-                    return detail::to_container<Cont>(std::forward<Rng>(rng));
+                    static_assert(!is_infinite<Rng>::value,
+                        "Attempt to convert an infinite range to a container.");
+                    using I = range_common_iterator_t<Rng>;
+                    return Cont{I{begin(rng)}, I{end(rng)}};
                 }
             };
-
-            constexpr to_container_fn<meta::quote<std::vector>> to_vector {};
-
-            template<template<typename...> class Cont>
-            view::to_container_fn<meta::quote<Cont>> to_()
-            {
-                return {};
-            }
-
-            template<typename Cont>
-            view::to_container_fn<meta::always<Cont>> to_()
-            {
-                return {};
-            }
         }
+        /// \endcond
+
+        /// \addtogroup group-core
+        /// @{
+
+        /// \ingroup group-core
+        constexpr detail::to_container_fn<meta::quote<std::vector>> to_vector {};
+
+        /// \brief For initializing a container of the specified type with the elements of an Iterable
+        template<template<typename...> class ContT>
+        detail::to_container_fn<meta::quote<ContT>> to_()
+        {
+            return {};
+        }
+
+        /// \overload
+        template<template<typename...> class ContT, typename Rng,
+            typename Cont = meta::apply<meta::quote<ContT>, range_value_t<Rng>>,
+            CONCEPT_REQUIRES_(Iterable<Rng>() && detail::ConvertibleToContainer<Rng, Cont>())>
+        Cont to_(Rng && rng)
+        {
+            return std::forward<Rng>(rng) | ranges::to_<ContT>();
+        }
+
+        /// \overload
+        template<typename Cont>
+        detail::to_container_fn<meta::always<Cont>> to_()
+        {
+            return {};
+        }
+
+        /// \overload
+        template<typename Cont, typename Rng,
+            CONCEPT_REQUIRES_(Iterable<Rng>() && detail::ConvertibleToContainer<Rng, Cont>())>
+        Cont to_(Rng && rng)
+        {
+            return std::forward<Rng>(rng) | ranges::to_<Cont>();
+        }
+
+        /// @}
     }
 }
 

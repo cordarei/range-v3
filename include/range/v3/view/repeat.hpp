@@ -22,16 +22,19 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-views
+        /// @{
+
         // Ordinarily, a view shouldn't contain its elements. This is so that copying
         // and assigning ranges is O(1), and also so that in the event of element
         // mutation, all the copies of the range see the mutation the same way. The
-        // repeated_view *does* own its lone element, though. This is OK because:
+        // repeat_view *does* own its lone element, though. This is OK because:
         //  - O(N) copying is fine when N==1 as it is in this case, and
         //  - The element is immutable, so there is no potential for incorrect
         //    semantics.
         template<typename Val>
-        struct repeated_view
-          : range_facade<repeated_view<Val>, true>
+        struct repeat_view
+          : range_facade<repeat_view<Val>, true>
         {
         private:
             Val value_;
@@ -62,26 +65,39 @@ namespace ranges
                 return {value_};
             }
         public:
-            repeated_view() = default;
-            constexpr explicit repeated_view(Val value)
+            repeat_view() = default;
+            constexpr explicit repeat_view(Val value)
               : value_(detail::move(value))
             {}
         };
 
         namespace view
         {
-            struct repeat_fn : pipeable<repeat_fn>
+            struct repeat_fn
             {
-                template<typename Val>
-                repeated_view<Val> operator()(Val value) const
+                template<typename Val,
+                    CONCEPT_REQUIRES_(SemiRegular<Val>())>
+                repeat_view<Val> operator()(Val value) const
                 {
-                    CONCEPT_ASSERT(SemiRegular<Val>());
-                    return repeated_view<Val>{std::move(value)};
+                    return repeat_view<Val>{std::move(value)};
                 }
+            #ifndef RANGES_DOXYGEN_INVOKED
+                template<typename Val,
+                    CONCEPT_REQUIRES_(!SemiRegular<Val>())>
+                void operator()(Val) const
+                {
+                    CONCEPT_ASSERT_MSG(SemiRegular<Val>(),
+                        "The value passed to view::repeat must be SemiRegular; that is, it needs "
+                        "to be default constructable, copy and move constructable, and destructable.");
+                }
+            #endif
             };
 
+            /// \sa `repeat_fn`
+            /// \ingroup group-views
             constexpr repeat_fn repeat{};
         }
+        /// @}
     }
 }
 

@@ -32,9 +32,9 @@
 #include <range/v3/range_interface.hpp>
 #include <range/v3/utility/concepts.hpp>
 #include <range/v3/utility/optional.hpp>
-#include <range/v3/utility/nullptr_v.hpp>
 #include <range/v3/view/any_range.hpp>
-#include <range/v3/view/join.hpp>
+#include <range/v3/view/empty.hpp>
+#include <range/v3/view/concat.hpp>
 
 namespace ranges
 {
@@ -115,7 +115,7 @@ namespace ranges
                                     any_input_range<Ref>
                                   >())>
             explicit recursive_range_fn(Fun fun)
-              : fun_{[=](){return view::join(fun(), make_range(_nullptr_v<value_type>(), _nullptr_v<value_type>()));}}
+              : fun_{[=](){return view::concat(fun(), view::empty<value_type>());}}
             {}
             recursive_range_fn(recursive_range_fn const &) = delete;
             recursive_range_fn &operator=(recursive_range_fn const &) = delete;

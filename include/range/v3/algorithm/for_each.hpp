@@ -25,6 +25,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct for_each_fn
         {
             template<typename I, typename S, typename F, typename P = ident,
@@ -55,7 +57,11 @@ namespace ranges
             }
         };
 
+        /// \sa `for_each_fn`
+        /// \ingroup group-algorithms
         constexpr for_each_fn for_each{};
+
+        /// @}
     } // namespace v3
 } // namespace ranges
 

@@ -28,6 +28,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-views
+        /// @{
         template<typename G>
         struct generate_view
           : range_facade<generate_view<G>, true>
@@ -81,15 +83,36 @@ namespace ranges
         {
             struct generate_fn
             {
-                template<typename G, CONCEPT_REQUIRES_(Function<G>())>
+                template<typename G>
+                using Concept = meta::and_<
+                    Function<G>,
+                    meta::not_<Same<void, concepts::Function::result_t<G>>>>;
+
+                template<typename G,
+                    CONCEPT_REQUIRES_(Concept<G>())>
                 generate_view<G> operator()(G g) const
                 {
                     return generate_view<G>{std::move(g)};
                 }
+            #ifndef RANGES_DOXYGEN_INVOKED
+                template<typename G,
+                    CONCEPT_REQUIRES_(!Concept<G>())>
+                void operator()(G) const
+                {
+                    CONCEPT_ASSERT_MSG(Function<G>(),
+                        "The argument to view::generate must be a function that is callable with "
+                        "no arguments");
+                    CONCEPT_ASSERT_MSG(meta::not_<Same<void, concepts::Function::result_t<G>>>(),
+                        "The return type of the function G must not be void.");
+                }
+            #endif
             };
 
+            /// \sa `generate_fn`
+            /// \ingroup group-views
             constexpr generate_fn generate{};
         }
+        /// \@}
     }
 }
 

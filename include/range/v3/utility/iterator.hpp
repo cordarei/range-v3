@@ -25,6 +25,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-utility
+        /// @{
         struct advance_fn
         {
             template<typename I>
@@ -37,6 +39,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `advance_fn`
         constexpr advance_fn advance{};
 
         struct advance_to_fn
@@ -66,6 +70,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `advance_to_fn`
         constexpr advance_to_fn advance_to{};
 
         struct advance_bounded_fn
@@ -112,6 +118,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `advance_bounded_fn`
         constexpr advance_bounded_fn advance_bounded {};
 
         struct next_fn
@@ -124,6 +132,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `next_fn`
         constexpr next_fn next{};
 
         struct prev_fn
@@ -136,6 +146,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `prev_fn`
         constexpr prev_fn prev {};
 
         struct next_to_fn
@@ -148,6 +160,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `next_to_fn`
         constexpr next_to_fn next_to{};
 
         struct next_bounded_fn
@@ -160,6 +174,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `next_bounded_fn`
         constexpr next_bounded_fn next_bounded{};
 
         struct iter_enumerate_fn
@@ -193,6 +209,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `iter_enumerate_fn`
         constexpr iter_enumerate_fn iter_enumerate {};
 
         struct iter_distance_fn
@@ -218,6 +236,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `iter_distance_fn`
         constexpr iter_distance_fn iter_distance {};
 
         struct iter_distance_compare_fn
@@ -260,6 +280,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `iter_distance_compare_fn`
         constexpr iter_distance_compare_fn iter_distance_compare {};
 
         // Like distance(b,e), but guaranteed to be O(1)
@@ -273,6 +295,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `iter_size_fn`
         constexpr iter_size_fn iter_size {};
 
         struct iter_swap_fn
@@ -289,6 +313,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `iter_swap_fn`
         constexpr iter_swap_fn iter_swap {};
 
         template<typename Cont>
@@ -330,6 +356,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-utility
+        /// \sa `back_inserter_fn`
         constexpr back_inserter_fn back_inserter {};
 
         template<typename T, typename Char = char, typename Traits = std::char_traits<Char>>
@@ -367,7 +395,9 @@ namespace ranges
                 return *this;
             }
         };
+        /// @}
 
+        /// \cond
         namespace adl_uncounted_recounted_detail
         {
             template<typename I>
@@ -415,9 +445,13 @@ namespace ranges
                 }
             };
         }
+        /// \endcond
 
+        /// \addtogroup group-utility
+        /// @{
         constexpr adl_uncounted_recounted_detail::uncounted_fn uncounted{};
         constexpr adl_uncounted_recounted_detail::recounted_fn recounted{};
+        /// @}
     }
 }
 

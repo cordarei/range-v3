@@ -22,8 +22,10 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \ingroup group-core
         struct at_fn
         {
+            /// \return `begin(rng)[n]`
             template<typename Rng,
                 CONCEPT_REQUIRES_(RandomAccessIterable<Rng>())>
             auto operator()(Rng &&rng, range_difference_t<Rng> n) const ->
@@ -33,6 +35,8 @@ namespace ranges
             }
         };
 
+        /// \ingroup group-core
+        /// \sa `at_fn`
         constexpr at_fn at {};
     }
 }

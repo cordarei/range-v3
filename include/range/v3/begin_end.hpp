@@ -22,6 +22,7 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \cond
         namespace adl_begin_end_detail
         {
             using std::begin;
@@ -94,10 +95,24 @@ namespace ranges
                 }
             };
         }
+        /// \endcond
 
+        /// \ingroup group-core
+        /// \return The result of an unqualified call to the `begin` free function
         constexpr begin_fn begin {};
+
+        /// \ingroup group-core
+        /// \return The result of an unqualified call to the `end` free function
         constexpr end_fn end {};
+
+        /// \ingroup group-core
+        /// \return The result of an unqualified call to the `begin` free function
+        /// with a const-qualified argument.
         constexpr cbegin_fn cbegin {};
+
+        /// \ingroup group-core
+        /// \return The result of an unqualified call to the `end` free function
+        /// with a const-qualified argument.
         constexpr cend_fn cend {};
     }
 }

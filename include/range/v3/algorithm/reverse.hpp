@@ -25,6 +25,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct reverse_fn
         {
         private:
@@ -66,8 +68,11 @@ namespace ranges
             }
         };
 
+        /// \sa `reverse_fn`
+        /// \ingroup group-algorithms
         constexpr reverse_fn reverse{};
 
+        /// @}
     } // namespace v3
 } // namespace ranges
 

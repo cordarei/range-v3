@@ -25,6 +25,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-algorithms
+        /// @{
         struct all_of_fn
         {
             template<typename I, typename S, typename F, typename P = ident,
@@ -62,10 +64,13 @@ namespace ranges
             }
         };
 
+        /// \sa `all_of_fn`
+        /// \ingroup group-algorithms
         constexpr with_braced_init_args<all_of_fn> all_of {};
 
-    } // inline namespace v3
+        /// @}
 
+    } // inline namespace v3
 } // namespace ranges
 
 #endif // include guard

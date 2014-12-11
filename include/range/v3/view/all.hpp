@@ -26,6 +26,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-views
+        /// @{
         namespace view
         {
             struct all_fn : pipeable<all_fn>
@@ -93,12 +95,15 @@ namespace ranges
                 }
             };
 
+            /// \sa `all_fn`
+            /// \ingroup group-views
             constexpr all_fn all{};
 
             template<typename Rng>
             using all_t =
                 meta::eval<std::decay<decltype(all(std::declval<Rng>()))>>;
         }
+        /// @}
     }
 }
 

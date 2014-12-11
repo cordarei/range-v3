@@ -22,6 +22,8 @@ namespace ranges
 {
     inline namespace v3
     {
+        /// \addtogroup group-core
+        /// @{
         struct lines_range
           : range_facade<lines_range>
         {
@@ -68,11 +70,19 @@ namespace ranges
             }
         };
 
-        inline
-        lines_range lines(std::istream & sin)
+        struct lines_fn
         {
-            return lines_range{sin};
-        }
+            lines_range operator()(std::istream & sin) const
+            {
+                return lines_range{sin};
+            }
+        };
+
+      /// \ingroup group-core
+      /// \sa `lines_fn`
+        constexpr lines_fn lines{};
+
+        /// @}
     }
 }
 

@@ -32,3 +32,5 @@ add_test(test.distance distance)
 add_executable(to_container to_container.cpp)
 add_test(test.to_container, to_container)
 
+add_executable(lines_range lines_range.cpp)
+add_test(test.lines_range lines_range)
